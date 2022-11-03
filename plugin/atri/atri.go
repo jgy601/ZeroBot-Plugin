@@ -52,16 +52,16 @@ func init() { // 插件主体
 				ctx.SendChain(randRecord("RocketPunch.amr"))
 			}
 		})
-	engine.OnFullMatchGroup([]string{"喜欢", "爱你", "爱", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, isAtriSleeping, zero.OnlyToMe).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			process.SleepAbout1sTo2s()
-			ctx.SendChain(randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
-		})
-	engine.OnKeywordGroup([]string{"草你妈", "操你妈", "脑瘫", "废柴", "fw", "five", "废物", "战斗", "爬", "爪巴", "sb", "SB", "傻B"}, isAtriSleeping, zero.OnlyToMe).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			process.SleepAbout1sTo2s()
-			ctx.SendChain(randImage("FN.jpg", "WQ.jpg", "WQ1.jpg"))
-		})
+	// engine.OnFullMatchGroup([]string{"喜欢", "爱你", "爱", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, isAtriSleeping, zero.OnlyToMe).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		process.SleepAbout1sTo2s()
+	// 		ctx.SendChain(randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
+	// 	})
+	// engine.OnKeywordGroup([]string{"草你妈", "操你妈", "脑瘫", "废柴", "fw", "five", "废物", "战斗", "爬", "爪巴", "sb", "SB", "傻B"}, isAtriSleeping, zero.OnlyToMe).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		process.SleepAbout1sTo2s()
+	// 		ctx.SendChain(randImage("FN.jpg", "WQ.jpg", "WQ1.jpg"))
+	// 	})
 	engine.OnFullMatchGroup([]string{"早安", "早哇", "早上好", "ohayo", "哦哈哟", "お早う", "早好", "早", "早早早"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			now := time.Now().Hour()
@@ -109,7 +109,7 @@ func init() { // 插件主体
 				process.SleepAbout1sTo2s()
 				ctx.SendChain(message.Reply(ctx.Event.MessageID), randText(
 					"午安w",
-					"午觉要好好睡哦，ATRI会陪伴在你身旁的w",
+					"午觉要好好睡哦，百合铃会陪伴在你身旁的w",
 					"嗯哼哼~睡吧，就像平常一样安眠吧~o(≧▽≦)o",
 					"睡你午觉去！哼唧！！",
 				))
@@ -139,7 +139,7 @@ func init() { // 插件主体
 			case now >= 11 && now < 15:
 				ctx.SendChain(message.Reply(ctx.Event.MessageID), randText(
 					"午安w",
-					"午觉要好好睡哦，ATRI会陪伴在你身旁的w",
+					"午觉要好好睡哦，百合铃会陪伴在你身旁的w",
 					"嗯哼哼~睡吧，就像平常一样安眠吧~o(≧▽≦)o",
 					"睡你午觉去！哼唧！！",
 				))
@@ -194,20 +194,20 @@ func init() { // 插件主体
 			))
 		})
 
-	engine.OnKeywordGroup([]string{"好吗", "是吗", "行不行", "能不能", "可不可以"}, isAtriSleeping).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			process.SleepAbout1sTo2s()
-			if rand.Intn(2) == 0 {
-				ctx.SendChain(randImage("YES.png", "NO.jpg"))
-			}
-		})
-	engine.OnKeywordGroup([]string{"啊这"}, isAtriSleeping).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			process.SleepAbout1sTo2s()
-			if rand.Intn(2) == 0 {
-				ctx.SendChain(randImage("AZ.jpg", "AZ1.jpg"))
-			}
-		})
+	// engine.OnKeywordGroup([]string{"好吗", "是吗", "行不行", "能不能", "可不可以"}, isAtriSleeping).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		process.SleepAbout1sTo2s()
+	// 		if rand.Intn(2) == 0 {
+	// 			ctx.SendChain(randImage("YES.png", "NO.jpg"))
+	// 		}
+	// 	})
+	// engine.OnKeywordGroup([]string{"啊这"}, isAtriSleeping).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		process.SleepAbout1sTo2s()
+	// 		if rand.Intn(2) == 0 {
+	// 			ctx.SendChain(randImage("AZ.jpg", "AZ1.jpg"))
+	// 		}
+	// 	})
 	engine.OnKeywordGroup([]string{"我好了"}, isAtriSleeping).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			process.SleepAbout1sTo2s()
@@ -219,8 +219,8 @@ func init() { // 插件主体
 			switch rand.Intn(5) {
 			case 0:
 				ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
-			case 1, 2:
-				ctx.SendChain(randImage("WH.jpg", "WH1.jpg", "WH2.jpg", "WH3.jpg"))
+				// case 1, 2:
+				// 	ctx.SendChain(randImage("WH.jpg", "WH1.jpg", "WH2.jpg", "WH3.jpg"))
 			}
 		})
 	engine.OnKeyword("离谱", isAtriSleeping).SetBlock(true).
@@ -228,8 +228,8 @@ func init() { // 插件主体
 			switch rand.Intn(5) {
 			case 0:
 				ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
-			case 1, 2:
-				ctx.SendChain(randImage("WH.jpg"))
+				// case 1, 2:
+				// 	ctx.SendChain(randImage("WH.jpg"))
 			}
 		})
 	engine.OnKeyword("答应我", isAtriSleeping, zero.OnlyToMe).SetBlock(true).
