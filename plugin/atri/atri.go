@@ -219,15 +219,15 @@ func init() { // 插件主体
 				// 	ctx.SendChain(randImage("WH.jpg", "WH1.jpg", "WH2.jpg", "WH3.jpg"))
 			}
 		})
-	engine.OnKeyword("离谱", isAtriSleeping).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			switch rand.Intn(5) {
-			case 0:
-				ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
-				// case 1, 2:
-				// 	ctx.SendChain(randImage("WH.jpg"))
-			}
-		})
+	// engine.OnKeyword("离谱", isAtriSleeping).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		switch rand.Intn(5) {
+	// 		case 0:
+	// 			ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
+	// 			// case 1, 2:
+	// 			// 	ctx.SendChain(randImage("WH.jpg"))
+	// 		}
+	// 	})
 	engine.OnKeyword("答应我", isAtriSleeping, zero.OnlyToMe).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			process.SleepAbout1sTo2s()
