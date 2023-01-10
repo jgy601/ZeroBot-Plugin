@@ -1,3 +1,6 @@
 [submodule "data"]
 	path = data
 	url = https://github.com/FloatTech/zbpdata
+[submodule "plugin/kokomi"]
+	path = plugin/kokomi
+	url = https://github.com/lianhong2758/kokomi-plugin.git
