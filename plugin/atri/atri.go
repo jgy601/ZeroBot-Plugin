@@ -213,38 +213,40 @@ func init() { // 插件主体
 
 	engine.OnKeywordGroup([]string{"好吗", "是吗", "行不行", "能不能", "可不可以"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
-			if rand.Intn(2) == 0 {
+			if rand.Intn(20) == 0 {
 				ctx.SendChain(dgtr.randImage("YES.png", "NO.jpg"))
 			}
 		})
 	engine.OnKeywordGroup([]string{"啊这"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
-			if rand.Intn(2) == 0 {
+			if rand.Intn(10) == 0 {
 				ctx.SendChain(dgtr.randImage("AZ.jpg", "AZ1.jpg"))
 			}
 		})
 	engine.OnKeywordGroup([]string{"我好了"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
-			ctx.SendChain(message.Reply(ctx.Event.MessageID), randText("不许好！", "憋回去！"))
+			if rand.Intn(2) == 0 {
+				ctx.SendChain(message.Reply(ctx.Event.MessageID), randText("不许好！", "憋回去！"))
+			}
 		})
 	engine.OnFullMatchGroup([]string{"？", "?", "¿"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
-			switch rand.Intn(5) {
+			switch rand.Intn(20) {
 			case 0:
 				ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
 			case 1, 2:
 				ctx.SendChain(dgtr.randImage("WH.jpg", "WH1.jpg", "WH2.jpg", "WH3.jpg"))
 			}
 		})
-	engine.OnKeyword("离谱").SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			switch rand.Intn(5) {
-			case 0:
-				ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
-			case 1, 2:
-				ctx.SendChain(dgtr.randImage("WH.jpg"))
-			}
-		})
+	// engine.OnKeyword("离谱").SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		switch rand.Intn(5) {
+	// 		case 0:
+	// 			ctx.SendChain(randText("?", "？", "嗯？", "(。´・ω・)ん?", "ん？"))
+	// 		case 1, 2:
+	// 			ctx.SendChain(dgtr.randImage("WH.jpg"))
+	// 		}
+	// 	})
 	engine.OnKeyword("答应我", zero.OnlyToMe).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			ctx.SendChain(randText("我无法回应你的请求"))
