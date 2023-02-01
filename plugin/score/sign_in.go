@@ -10,9 +10,12 @@ import (
 	"time"
 
 	"github.com/Coloured-glaze/gg"
+	"github.com/FloatTech/AnimeAPI/bilibili"
+	"github.com/FloatTech/AnimeAPI/wallet"
 	"github.com/FloatTech/floatbox/file"
 	"github.com/FloatTech/floatbox/img/writer"
 	"github.com/FloatTech/floatbox/process"
+	"github.com/FloatTech/floatbox/web"
 	ctrl "github.com/FloatTech/zbpctrl"
 	"github.com/FloatTech/zbputils/control"
 	"github.com/FloatTech/zbputils/ctxext"
@@ -23,13 +26,11 @@ import (
 	"github.com/wcharczuk/go-chart/v2"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
-
-	// 货币系统
-	"github.com/FloatTech/AnimeAPI/wallet"
 )
 
 const (
-	backgroundURL = "https://img.moehu.org/pic.php?id=pc"
+	backgroundURL = "https://iw233.cn/api.php?sort=pc"
+	referer       = "https://weibo.com/"
 	signinMax     = 1
 	// SCOREMAX 分数上限定为1200
 	SCOREMAX = 1200
@@ -149,8 +150,8 @@ func init() {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			canvas.DrawString(nickName+fmt.Sprintf(" ATRI币+%d", add), float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.3)
-			canvas.DrawString("当前ATRI币:"+strconv.FormatInt(int64(score), 10), float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.4)
+			canvas.DrawString(nickName+fmt.Sprintf(" 金币+%d", add), float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.3)
+			canvas.DrawString("当前金币:"+strconv.FormatInt(int64(score), 10), float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.4)
 			canvas.DrawString("LEVEL:"+strconv.FormatInt(int64(rank), 10), float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.5)
 			canvas.DrawRectangle(float64(back.Bounds().Size().X)*0.1, float64(back.Bounds().Size().Y)*1.55, float64(back.Bounds().Size().X)*0.6, float64(back.Bounds().Size().Y)*0.1)
 			canvas.SetRGB255(150, 150, 150)
@@ -307,5 +308,13 @@ func initPic(picFile string) error {
 		return nil
 	}
 	defer process.SleepAbout1sTo2s()
-	return file.DownloadTo(backgroundURL, picFile)
+	url, err := bilibili.GetRealURL(backgroundURL)
+	if err != nil {
+		return err
+	}
+	data, err := web.RequestDataWith(web.NewDefaultClient(), url, "", referer, "", nil)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(picFile, data, 0644)
 }
