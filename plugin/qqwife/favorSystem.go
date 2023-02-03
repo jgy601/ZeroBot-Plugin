@@ -196,6 +196,7 @@ func init() {
 
 	engine.OnFullMatch("好感度数据整理", zero.SuperUserPermission, getdb).SetBlock(true).Limit(ctxext.LimitByUser).
 		Handle(func(ctx *zero.Ctx) {
+			ctx.SendChain(message.Text("开始整理力，请稍等"))
 			民政局.Lock()
 			defer 民政局.Unlock()
 			count, err := 民政局.db.Count("favorability")
@@ -214,7 +215,9 @@ func init() {
 				delInfo = append(delInfo, favor.Userinfo)
 				// 解析旧数据
 				userList := strings.Split(favor.Userinfo, "+")
-				if userList[0] > userList[1] {
+				maxQQ, _ := strconv.ParseInt(userList[0], 10, 64)
+				minQQ, _ := strconv.ParseInt(userList[1], 10, 64)
+				if maxQQ > minQQ {
 					favor.Userinfo = userList[0] + "+" + userList[1]
 				} else {
 					favor.Userinfo = userList[1] + "+" + userList[0]

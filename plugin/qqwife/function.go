@@ -182,10 +182,10 @@ func init() {
 				ctx.SendChain(message.Text("[ERROR]:", err))
 				return
 			}
-			if favor < 30 {
-				favor = 30 // 保底10%概率
+			if favor < 20 {
+				favor = 20 // 保底20%概率
 			}
-			if rand.Intn(101) >= favor/3 {
+			if rand.Intn(101) >= favor {
 				ctx.SendChain(message.Text("失败了！可惜"))
 				return
 			}
