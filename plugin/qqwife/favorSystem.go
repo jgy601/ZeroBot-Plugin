@@ -87,7 +87,7 @@ func init() {
 			moneyToFavor := rand.Intn(math.Min(walletinfo, 50)) + 1
 			// 计算钱对应的好感值
 			newFavor := 1
-			moodMax := 2
+			moodMax := 3
 			if favor > 50 {
 				newFavor = moneyToFavor % 10 // 礼物厌倦
 			} else {
