@@ -107,7 +107,7 @@ import (
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/juejuezi"   // 绝绝子生成器
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/kokomi" // kokomi原神面板
 
-	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/lolicon"       // lolicon 随机图片
+	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/lolicon" // lolicon 随机图片
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/magicprompt"   // magicprompt吟唱提示
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/midicreate"    // 简易midi音乐制作
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moegoe"        // 日韩 VITS 模型拟声
@@ -156,7 +156,11 @@ import (
 
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/thesaurus" // 词典匹配回复
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/wtf"           // 鬼东西
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife" // 用于ZeroBot-Plugin的老婆库
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/animegan"       // 二次元画风
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/games"          // 游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"      // 派对游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife"        // 用于ZeroBot-Plugin的老婆库
 
 	//                               ^^^^                               //
 	//                          ^^^^^^^^^^^^^^                          //
