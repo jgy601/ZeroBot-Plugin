@@ -159,6 +159,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/animegan"       // 二次元画风
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/games"          // 游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/killall"        // 启用/禁用所有插件
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"      // 派对游戏
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife"        // 用于ZeroBot-Plugin的老婆库
 
