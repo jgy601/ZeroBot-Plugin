@@ -156,8 +156,14 @@ import (
 
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/thesaurus" // 词典匹配回复
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/wtf"           // 鬼东西
+
+	// 额外
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/animegan"       // 二次元画风
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirecall"     // 反撤回
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirepeat"     // 限制复读
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moehu"          // 图库
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/games"          // 游戏
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"      // 派对游戏
