@@ -455,19 +455,19 @@ func init() { // 插件主体
 			}
 		})
 	// 退群提醒
-	// engine.OnNotice().SetBlock(false).
-	// 	Handle(func(ctx *zero.Ctx) {
-	// 		if ctx.Event.NoticeType == "group_decrease" {
-	// 			var w welcome
-	// 			err := db.Find("farewell", &w, "where gid = "+strconv.FormatInt(ctx.Event.GroupID, 10))
-	// 			if err == nil {
-	// 				ctx.SendGroupMessage(ctx.Event.GroupID, message.ParseMessageFromString(welcometocq(ctx, w.Msg)))
-	// 			} else {
-	// 				userid := ctx.Event.UserID
-	// 				ctx.SendChain(message.Text(ctx.CardOrNickName(userid), "(", userid, ")", "离开了我们..."))
-	// 			}
-	// 		}
-	// 	})
+	engine.OnNotice().SetBlock(false).
+		Handle(func(ctx *zero.Ctx) {
+			if ctx.Event.NoticeType == "group_decrease" {
+				var w welcome
+				err := db.Find("farewell", &w, "where gid = "+strconv.FormatInt(ctx.Event.GroupID, 10))
+				if err == nil {
+					ctx.SendGroupMessage(ctx.Event.GroupID, message.ParseMessageFromString(welcometocq(ctx, w.Msg)))
+				} else {
+					userid := ctx.Event.UserID
+					ctx.SendChain(message.Text(ctx.CardOrNickName(userid), "(", userid, ")", "离开了我们..."))
+				}
+			}
+		})
 	// 设置欢迎语
 	engine.OnRegex(`^设置欢迎语([\s\S]*)$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
@@ -496,33 +496,33 @@ func init() { // 插件主体
 			}
 		})
 	// 设置告别辞
-	// engine.OnRegex(`^设置告别辞([\s\S]*)$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
-	// 	Handle(func(ctx *zero.Ctx) {
-	// 		farewellstring := ctx.State["regex_matched"].([]string)[1]
-	// 		farewellstring = message.UnescapeCQCodeText(farewellstring)
-	// 		w := &welcome{
-	// 			GrpID: ctx.Event.GroupID,
-	// 			Msg:   farewellstring,
-	// 		}
-	// 		err := db.Insert("farewell", w)
-	// 		if err == nil {
-	// 			ctx.SendChain(message.Text("记住啦!"))
-	// 		} else {
-	// 			ctx.SendChain(message.Text("出错啦: ", err))
-	// 		}
-	// 	})
+	engine.OnRegex(`^设置告别辞([\s\S]*)$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
+		Handle(func(ctx *zero.Ctx) {
+			farewellstring := ctx.State["regex_matched"].([]string)[1]
+			farewellstring = message.UnescapeCQCodeText(farewellstring)
+			w := &welcome{
+				GrpID: ctx.Event.GroupID,
+				Msg:   farewellstring,
+			}
+			err := db.Insert("farewell", w)
+			if err == nil {
+				ctx.SendChain(message.Text("记住啦!"))
+			} else {
+				ctx.SendChain(message.Text("出错啦: ", err))
+			}
+		})
 	// 测试告别辞
-	// engine.OnFullMatch("测试告别辞", zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
-	// 	Handle(func(ctx *zero.Ctx) {
-	// 		var w welcome
-	// 		err := db.Find("farewell", &w, "where gid = "+strconv.FormatInt(ctx.Event.GroupID, 10))
-	// 		if err == nil {
-	// 			ctx.SendGroupMessage(ctx.Event.GroupID, message.ParseMessageFromString(welcometocq(ctx, w.Msg)))
-	// 		} else {
-	// 			userid := ctx.Event.UserID
-	// 			ctx.SendChain(message.Text(ctx.CardOrNickName(userid), "(", userid, ")", "离开了我们..."))
-	// 		}
-	// 	})
+	engine.OnFullMatch("测试告别辞", zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
+		Handle(func(ctx *zero.Ctx) {
+			var w welcome
+			err := db.Find("farewell", &w, "where gid = "+strconv.FormatInt(ctx.Event.GroupID, 10))
+			if err == nil {
+				ctx.SendGroupMessage(ctx.Event.GroupID, message.ParseMessageFromString(welcometocq(ctx, w.Msg)))
+			} else {
+				userid := ctx.Event.UserID
+				ctx.SendChain(message.Text(ctx.CardOrNickName(userid), "(", userid, ")", "离开了我们..."))
+			}
+		})
 	// 入群后验证开关
 	engine.OnRegex(`^(.*)入群验证$`, zero.OnlyGroup, zero.AdminPermission).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
