@@ -162,6 +162,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirecall"     // 反撤回
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirepeat"     // 限制复读
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"           // 服务详情
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moehu"          // 图库
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
 
