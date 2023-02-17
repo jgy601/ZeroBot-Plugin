@@ -11,8 +11,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/FloatTech/ZeroBot-Plugin/kanban"
 	"github.com/disintegration/imaging"
+
+	"github.com/FloatTech/ZeroBot-Plugin/kanban"
 
 	"github.com/FloatTech/AnimeAPI/bilibili"
 	"github.com/FloatTech/AnimeAPI/wallet"
@@ -372,5 +373,8 @@ func initPic(picFile string, uid int64) (avatar []byte, err error) {
 		return nil, err
 	}
 	avatar, err = web.GetData("http://q4.qlogo.cn/g?b=qq&nk=" + strconv.FormatInt(uid, 10) + "&s=640")
+	if err != nil {
+		return nil, err
+	}
 	return avatar, os.WriteFile(picFile, data, 0644)
 }

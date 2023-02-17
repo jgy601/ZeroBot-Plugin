@@ -167,7 +167,6 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"         // 图片
 
-	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/games"          // 游戏
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"      // 派对游戏
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife" // 用于ZeroBot-Plugin的老婆库
 
