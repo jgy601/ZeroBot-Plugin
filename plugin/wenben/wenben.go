@@ -34,23 +34,23 @@ func init() { // 主函数
 		DisableOnDefault: false,
 		Brief:            "天气/拼音查询",
 		Help: "文本命令大全\n" +
-			"- 天气查询：xxx天气" +
+			// "- 天气查询：xxx天气" +
 			"- 拼音查询：xxx拼音" +
 			"- 每日一言" +
 			"- 每日鸡汤" +
 			"- 每日情话" +
 			"- 绕口令",
 	})
-	en.OnSuffix("天气").SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			str := ctx.State["args"].(string)
-			es, err := web.GetData(fmt.Sprintf(tianqi, str)) // 将网站返回结果赋值
-			if err != nil {
-				ctx.SendChain(message.Text("出现错误捏：", err))
-				return
-			}
-			ctx.SendChain(message.Text(str, "天气如下:\n", helper.BytesToString(es)))
-		})
+	// en.OnSuffix("天气").SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		str := ctx.State["args"].(string)
+	// 		es, err := web.GetData(fmt.Sprintf(tianqi, str)) // 将网站返回结果赋值
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("出现错误捏：", err))
+	// 			return
+	// 		}
+	// 		ctx.SendChain(message.Text(str, "天气如下:\n", helper.BytesToString(es)))
+	// 	})
 	en.OnSuffix("拼音").SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			str := ctx.State["args"].(string)

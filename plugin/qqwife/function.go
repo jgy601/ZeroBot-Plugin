@@ -339,7 +339,7 @@ func init() {
 			if favor < 20 {
 				favor = 10
 			}
-			if rand.Intn(101) > 110-favor {
+			if rand.Intn(106) > 110-favor {
 				ctx.SendChain(message.Text(sendtext[3][rand.Intn(len(sendtext[3]))]))
 				return
 			}

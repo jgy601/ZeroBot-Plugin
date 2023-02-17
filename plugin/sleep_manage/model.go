@@ -57,10 +57,10 @@ func (sdb *sleepdb) sleep(gid, uid int64) (position int, awakeTime time.Duration
 	db := (*gorm.DB)(sdb)
 	now := time.Now()
 	var today time.Time
-	if now.Hour() >= 21 {
-		today = now.Add(-time.Hour*time.Duration(-21+now.Hour()) - time.Minute*time.Duration(now.Minute()) - time.Second*time.Duration(now.Second()))
-	} else if now.Hour() <= 3 {
-		today = now.Add(-time.Hour*time.Duration(3+now.Hour()) - time.Minute*time.Duration(now.Minute()) - time.Second*time.Duration(now.Second()))
+	if now.Hour() >= 18 {
+		today = now.Add(-time.Hour*time.Duration(-18+now.Hour()) - time.Minute*time.Duration(now.Minute()) - time.Second*time.Duration(now.Second()))
+	} else if now.Hour() <= 6 {
+		today = now.Add(-time.Hour*time.Duration(6+now.Hour()) - time.Minute*time.Duration(now.Minute()) - time.Second*time.Duration(now.Second()))
 	}
 	st := SleepManage{
 		GroupID:   gid,

@@ -38,22 +38,22 @@ func init() { // 插件主体
 			))
 		})
 	// 戳一戳
-	engine.On("notice/notify/poke", zero.OnlyToMe).SetBlock(false).
-		Handle(func(ctx *zero.Ctx) {
-			var nickname = zero.BotConfig.NickName[0]
-			switch {
-			case poke.Load(ctx.Event.GroupID).AcquireN(3):
-				// 5分钟共8块命令牌 一次消耗3块命令牌
-				time.Sleep(time.Second * 1)
-				ctx.SendChain(message.Text("请不要戳", nickname, " >_<"))
-			case poke.Load(ctx.Event.GroupID).Acquire():
-				// 5分钟共8块命令牌 一次消耗1块命令牌
-				time.Sleep(time.Second * 1)
-				ctx.SendChain(message.Text("喂(#`O′) 戳", nickname, "干嘛！"))
-			default:
-				// 频繁触发，不回复
-			}
-		})
+	// engine.On("notice/notify/poke", zero.OnlyToMe).SetBlock(false).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		var nickname = zero.BotConfig.NickName[0]
+	// 		switch {
+	// 		case poke.Load(ctx.Event.GroupID).AcquireN(3):
+	// 			// 5分钟共8块命令牌 一次消耗3块命令牌
+	// 			time.Sleep(time.Second * 1)
+	// 			ctx.SendChain(message.Text("请不要戳", nickname, " >_<"))
+	// 		case poke.Load(ctx.Event.GroupID).Acquire():
+	// 			// 5分钟共8块命令牌 一次消耗1块命令牌
+	// 			time.Sleep(time.Second * 1)
+	// 			ctx.SendChain(message.Text("喂(#`O′) 戳", nickname, "干嘛！"))
+	// 		default:
+	// 			// 频繁触发，不回复
+	// 		}
+	// 	})
 	// 群空调
 	var AirConditTemp = map[int64]int{}
 	var AirConditSwitch = map[int64]bool{}
