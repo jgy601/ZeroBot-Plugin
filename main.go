@@ -163,6 +163,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirecall"     // 反撤回
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirepeat"     // 限制复读
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"           // 服务详情
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/games"          // 游戏
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moehu"          // 图库
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"         // 图片
