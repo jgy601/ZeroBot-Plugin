@@ -61,13 +61,11 @@ import (
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/aipaint"  // ai绘图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/aiwife" // 随机老婆
-
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/alipayvoice"   // 支付宝到账语音
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/autowithdraw" // 触发者撤回时也自动撤回
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/b14"           // base16384加解密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/baidu" // 百度一下
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/baiduaudit" // 百度内容审核
-
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/base64gua"     // base64卦加解密
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/baseamasiro"   // base天城文加解密
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/bilibili" // b站相关
@@ -78,6 +76,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chrev"        // 英文字符翻转
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/coser"        // 三次元小姐姐
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/cpstory"      // cp短打
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dailynews"    // 今日早报
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/danbooru"     // DeepDanbooru二次元图标签识别
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/diana"        // 嘉心糖发病
@@ -95,17 +94,16 @@ import (
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/guessmusic" // 猜歌
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/heisi"      // 黑丝
-
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/hs"            // 炉石
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/hyaku" // 百人一首
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/image_finder"  // 关键字搜图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/inject" // 注入指令
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/jandan"        // 煎蛋网无聊图
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/jiami"         // 兽语加密
-	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/jikipedia"     // 小鸡词典
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/jptingroom" // 日语听力学习材料
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/juejuezi"   // 绝绝子生成器
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/kokomi" // kokomi原神面板
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/kfccrazythursday" // 疯狂星期四
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/kokomi"           // kokomi原神面板
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/lolicon" // lolicon 随机图片
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/magicprompt"   // magicprompt吟唱提示
@@ -143,18 +141,19 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/translation"   // 翻译
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vitsnyaru"     // vits猫雷
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtb_quotation" // vtb语录
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtbmusic"      // vtb点歌
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wallet"        // 钱包
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wangyiyun"     // 网易云音乐热评
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/warframeapi"   // warframeAPI插件
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wenben"        // 文本指令大全
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/wenxinAI"      // 百度文心AI画图
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/thesaurus"  // 词典匹配回复
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/word_count" // 聊天热词
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/wordle"     // 猜单词
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/ygo"        // 游戏王相关插件
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/ymgal"      // 月幕galgame
 
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/thesaurus" // 词典匹配回复
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/wtf"           // 鬼东西
 
 	// 额外
