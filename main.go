@@ -157,7 +157,6 @@ import (
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/wtf"           // 鬼东西
 
 	// 额外
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/animegan"       // 二次元画风
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirecall"     // 反撤回
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirepeat"     // 限制复读
