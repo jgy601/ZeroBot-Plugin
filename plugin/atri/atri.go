@@ -76,14 +76,14 @@ func init() { // 插件主体
 				ctx.SendChain(dgtr.randRecord("RocketPunch.amr"))
 			}
 		})
-	engine.OnFullMatchGroup([]string{"喜欢", "爱你", "爱", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, zero.OnlyToMe).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			ctx.SendChain(dgtr.randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
-		})
-	engine.OnKeywordGroup([]string{"草你妈", "操你妈", "脑瘫", "废柴", "fw", "five", "废物", "战斗", "爬", "爪巴", "sb", "SB", "傻B"}, zero.OnlyToMe).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			ctx.SendChain(dgtr.randImage("FN.jpg", "WQ.jpg", "WQ1.jpg"))
-		})
+	// engine.OnFullMatchGroup([]string{"喜欢", "爱你", "爱", "suki", "daisuki", "すき", "好き", "贴贴", "老婆", "亲一个", "mua"}, zero.OnlyToMe).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		ctx.SendChain(dgtr.randImage("SUKI.jpg", "SUKI1.jpg", "SUKI2.png"))
+	// 	})
+	// engine.OnKeywordGroup([]string{"草你妈", "操你妈", "脑瘫", "废柴", "fw", "five", "废物", "战斗", "爬", "爪巴", "sb", "SB", "傻B"}, zero.OnlyToMe).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		ctx.SendChain(dgtr.randImage("FN.jpg", "WQ.jpg", "WQ1.jpg"))
+	// 	})
 	engine.OnFullMatchGroup([]string{"早安", "早哇", "早上好", "ohayo", "哦哈哟", "お早う", "早好", "早", "早早早"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			now := time.Now().Hour()
@@ -217,12 +217,12 @@ func init() { // 插件主体
 				ctx.SendChain(dgtr.randImage("YES.png", "NO.jpg"))
 			}
 		})
-	engine.OnKeywordGroup([]string{"啊这"}).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			if rand.Intn(25) == 0 {
-				ctx.SendChain(dgtr.randImage("AZ.jpg", "AZ1.jpg"))
-			}
-		})
+	// engine.OnKeywordGroup([]string{"啊这"}).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		if rand.Intn(25) == 0 {
+	// 			ctx.SendChain(dgtr.randImage("AZ.jpg", "AZ1.jpg"))
+	// 		}
+	// 	})
 	engine.OnKeywordGroup([]string{"我好了"}).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			if rand.Intn(10) == 0 {
