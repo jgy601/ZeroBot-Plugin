@@ -1,7 +1,6 @@
 <div align="center">
-  <a href="https://crypko.ai/crypko/5k8HyUVTq5421/">
   <img src=".github/hua_nobg_512.gif" alt="椛" width = "400">
-  </a><br>
+  <br>
 
   <h1>ZeroBot-Plugin</h1>
 
@@ -38,15 +37,18 @@
 
 > 如果您对开发插件感兴趣，欢迎加入[ZeroBot-Plugin-Playground](https://github.com/FloatTech/ZeroBot-Plugin-Playground)
 
+> webui持续开发中, 欢迎加入[ZeroBot-Plugin-Webui](https://github.com/FloatTech/ZeroBot-Plugin-Webui)
+
 ## 命令行参数
 > `[]`代表是可选参数
 ```bash
-zerobot [-h] [-n nickname] [-t token] [-u url] [-p prefix] [-d|w] [-c|s config.json] [-l latency] [-r ringlen] [-x max process time] [qq1 qq2 qq3 ...] [&]
+zerobot [-h] [-n nickname] [-t token] [-u url] [-g url] [-p prefix] [-d|w] [-c|s config.json] [-l latency] [-r ringlen] [-x max process time] [qq1 qq2 qq3 ...] [&]
 ```
 - **-h**: 显示帮助
 - **-n nickname**: 设置默认昵称，默认为`椛椛`
 - **-t token**: 设置`AccessToken`，默认为空
 - **-u url**: 设置`Url`，默认为`ws://127.0.0.1:6700`
+- **-g url**: 设置`webui url`，默认为`127.0.0.1:3000`
 - **-p prefix**: 设置命令前缀，默认为`/`
 - **-d|w**: 开启 debug | warning 级别及以上日志输出
 - **-c config.json**: 从`config.json`加载`bot`配置
@@ -131,6 +133,12 @@ zerobot [-h] [-n nickname] [-t token] [-u url] [-p prefix] [-d|w] [-c|s config.j
   - [x] /服务列表
 
   - [x] /设置服务列表显示行数 xx
+
+  - [x] /设置webui用户名 zerobot 密码 123456
+
+  - [x] /webui启动
+
+  - [x] /webui停止
 
 	默认值为9,该设置仅运行时有效,zbp重启后重置
   - [x] @Bot 插件冲突检测 (会在本群发送一条消息并在约 1s 后撤回以检测其它同类 bot 中已启用的插件并禁用)
@@ -647,6 +655,24 @@ print("run[CQ:image,file="+j["img"]+"]")
   - [x] 发大病
 
   - [x] 教你一篇小作文[作文]
+
+</details>
+<details>
+  <summary>多功能抽签</summary>
+
+  `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin/drawlots"`
+
+  支持图包文件夹和gif抽签
+
+  - [x] (刷新)抽签列表
+  
+  - [x] 抽签-[签名]
+  
+  - [x] 查看抽签[gif签名]
+	
+  - [x] 添加抽签[签名][gif图片]
+	
+  - [x] 删除抽签[gif签名]
 
 </details>
 <details>
@@ -1301,7 +1327,7 @@ print("run[CQ:image,file="+j["img"]+"]")
 
 </details>
 <details>
-  <summary>vtb语录</summary>
+  <summary>vtb点歌</summary>
 
   `import _ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtbmusic"`
 
