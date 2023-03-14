@@ -215,8 +215,8 @@ func init() {
 			ctx.SendChain(message.Text("[ERROR]:", err))
 			return
 		}
-		if userInfo.Food > 50 {
-			ctx.SendChain(message.Reply(id), message.Text("你家的猫粮已经装满仓库(上限50斤)了!"))
+		if userInfo.Food > 500 {
+			ctx.SendChain(message.Reply(id), message.Text("你家的猫粮已经装满仓库(上限500斤)了!"))
 			return
 		}
 		/*******************************************************/

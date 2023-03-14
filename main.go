@@ -168,6 +168,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/anotherfortune" // 简单的测人品
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirecall"     // 反撤回
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/antirepeat"     // 限制复读
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/chatgpt"        // Chatgpt 3.5
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/cybercat"       // 云养猫
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"           // 服务详情
@@ -184,7 +185,7 @@ import (
 	//                          ^^^^^^^^^^^^^^                          //
 	//                      ^^^^^^^中优先级区^^^^^^^                      //
 	//               ^^^^^^^^^^^^^^中优先级区^^^^^^^^^^^^^^               //
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^中优先级区^^^^^^^^^^^^^^^^^/*  */^^^^^^^^^^^ //
+	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^中优先级区^^^^^^^^^^^^^^^^^^^^^^^^^^^ //
 	// ----------------------------中优先级区---------------------------- //
 	//                                                                  //
 	//                                                                  //
