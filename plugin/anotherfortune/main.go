@@ -95,7 +95,6 @@ func init() {
 			randEveryone := fcext.RandSenderPerDayN(ctx.Event.UserID, 100)
 			si := now + userS // 合成
 			dyn := time.Now().Hour()
-			weeks := time.Now().Weekday()
 			switch {
 			case dyn <= 6 && dyn >= 0:
 				uptime = "凌晨好~还没有睡觉呢~再不睡觉的话咱把你敲晕~" // 计算是早上还是晚上
@@ -107,11 +106,6 @@ func init() {
 				uptime = "下午好ww~咱很高兴看到你精力充沛的样子w"
 			case dyn <= 24 && dyn > 18:
 				uptime = "晚上好吖w~今天过的开心嘛ww"
-			}
-			if weeks.String() == "Thursday" {
-				vme50 = "今天是疯狂星期四 v我50好嘛 www"
-			} else {
-				vme50 = ""
 			}
 			// CTRL C + CTRL V
 			if signTF[si] == 0 {
@@ -137,7 +131,7 @@ func init() {
 					message.Text("\n今日一言:\n"),
 					message.Text(helper.BytesToString(yiyan), "\n"),
 					message.Text("今日塔罗牌是: \n归类于", cardtype, reasons[rand.Intn(len(reasons))], position[p], " 的 ", name, "\n"),
-					message.Text("\n其意义为：\n", info, "\n", vme50))
+					message.Text("\n其意义为：\n", info, "\n"))
 			} else {
 				ctx.SendChain(message.At(user), message.Text(" 今天已经测过了哦~今日的人品值为", result[user], "呢~"))
 			}

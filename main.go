@@ -78,7 +78,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/choose" // 选择困难症帮手
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/chouxianghua" // 说抽象话
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/chrev"        // 英文字符翻转
-	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/coser"     // 三次元小姐姐
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/coser"     // 三次元小姐姐
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/cpstory"   // cp短打
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/dailynews" // 今日早报
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/danbooru"  // DeepDanbooru二次元图标签识别
@@ -175,9 +175,10 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moehu" // 图库
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame" // 派对游戏
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"    // 图片
-	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife"   // 用于ZeroBot-Plugin的老婆库
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"  // 派对游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/playwright" // 网页截图
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"     // 图片
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife"    // 用于ZeroBot-Plugin的老婆库
 
 	//                               ^^^^                               //
 	//                          ^^^^^^^^^^^^^^                          //

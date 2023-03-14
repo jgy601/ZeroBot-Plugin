@@ -45,7 +45,7 @@ var (
 	engine    = control.Register("score", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault:  false,
 		Brief:             "签到",
-		Help:              "- 签到\n- 获得签到背景[@xxx] | 获得签到背景\n- 查看等级排名\n注:为跨群排名\n- 查看我的钱包\n- 查看钱包排名\n注:为本群排行，若群人数太多不建议使用该功能!!!",
+		Help:              "- 签到\n- (获得|获取)签到背景[@xxx] | (获得|获取)签到背景\n- 查看等级排名\n注:为跨群排名\n- 查看我的钱包\n- 查看钱包排名\n注:为本群排行，若群人数太多不建议使用该功能!!!",
 		PrivateDataFolder: "score",
 	})
 )
@@ -240,7 +240,7 @@ func init() {
 			ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
 		})
 
-	engine.OnPrefix("获得签到背景", zero.OnlyGroup).Limit(ctxext.LimitByGroup).SetBlock(true).
+	engine.OnPrefixGroup([]string{"获得签到背景", "获取签到背景", "签到背景"}, zero.OnlyGroup).Limit(ctxext.LimitByGroup).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			param := ctx.State["args"].(string)
 			var uidStr string

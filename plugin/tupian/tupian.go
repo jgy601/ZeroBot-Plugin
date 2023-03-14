@@ -28,6 +28,7 @@ const (
 func init() {
 	engine := control.Register("tupian", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault: false,
+		Brief:            "图片",
 		Help: "全部图片指令\n" +
 			"- cos\n" +
 			"- 兽耳\n" +
