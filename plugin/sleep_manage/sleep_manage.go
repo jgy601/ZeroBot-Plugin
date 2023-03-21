@@ -54,14 +54,14 @@ func timeDuration(time time.Duration) (hour, minute, second int64) {
 	return hour, minute, second
 }
 
-// 只统计6点到18点的早安
-func isMorning(ctx *zero.Ctx) bool {
+// 只统计6点到17点的早安
+func isMorning(*zero.Ctx) bool {
 	now := time.Now().Hour()
 	return now >= 6 && now <= 17
 }
 
-// 只统计18点到凌晨6点的晚安
-func isEvening(ctx *zero.Ctx) bool {
+// 只统计18点到凌晨5点的晚安
+func isEvening(*zero.Ctx) bool {
 	now := time.Now().Hour()
 	return now >= 18 || now <= 5
 }
