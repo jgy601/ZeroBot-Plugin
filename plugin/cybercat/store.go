@@ -63,15 +63,15 @@ func init() {
 			return
 		}
 		/*******************************************************/
-		if wallet.GetWalletOf(ctx.Event.UserID) < 100 {
-			ctx.SendChain(message.Reply(id), message.Text("一只喵喵官方售价100哦;\n你身上没有足够的钱,快去赚钱吧~"))
+		if wallet.GetWalletOf(ctx.Event.UserID) < 20 {
+			ctx.SendChain(message.Reply(id), message.Text("一只喵喵官方售价20哦;\n你身上没有足够的钱,快去赚钱吧~"))
 			return
 		}
 		messageText := make(message.Message, 0, 3)
 		messageText = append(messageText, message.Reply(id))
-		money := 100
+		money := 20
 		if rand.Intn(10) == 5 {
-			money = rand.Intn(50) + 50
+			money = rand.Intn(10) + 10
 			messageText = append(messageText, message.Text("你前往的喵喵店时发现正好有活动,\n一只喵喵现在只需要", money, "\n------------------------\n"))
 		}
 		/*******************************************************/
@@ -259,10 +259,14 @@ func init() {
 			return
 		}
 		newName := strings.TrimSpace(ctx.State["args"].(string))
-		if newName != "" {
-			userInfo.Name = newName
-		} else {
+		switch {
+		case newName == "":
 			userInfo.Name = userInfo.Type
+		case len(newName) > 6*3:
+			ctx.SendChain(message.Reply(id), message.Text("请输入正确的名字"))
+			return
+		default:
+			userInfo.Name = newName
 		}
 		if catdata.insert(gidStr, userInfo) != nil {
 			ctx.SendChain(message.Text("[ERROR]:", err))
