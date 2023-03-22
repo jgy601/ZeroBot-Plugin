@@ -4,14 +4,11 @@ package score
 import (
 	"bytes"
 	"image"
-	"image/color"
 	"math"
 	"math/rand"
 	"os"
 	"strconv"
 	"time"
-
-	"github.com/disintegration/imaging"
 
 	"github.com/FloatTech/ZeroBot-Plugin/kanban/banner"
 
@@ -60,6 +57,185 @@ func init() {
 		}
 		sdb = initialize(engine.DataFolder() + "score.db")
 	}()
+	// engine.OnFullMatch("签到").Limit(ctxext.LimitByUser).SetBlock(true).
+	// 	Handle(func(ctx *zero.Ctx) {
+	// 		uid := ctx.Event.UserID
+	// 		now := time.Now()
+	// 		today := now.Format("20060102")
+	// 		// 签到图片
+	// 		drawedFile := cachePath + strconv.FormatInt(uid, 10) + today + "signin.png"
+	// 		picFile := cachePath + strconv.FormatInt(uid, 10) + today + ".png"
+	// 		// 获取签到时间
+	// 		si := sdb.GetSignInByUID(uid)
+	// 		siUpdateTimeStr := si.UpdatedAt.Format("20060102")
+	// 		switch {
+	// 		case si.Count >= signinMax && siUpdateTimeStr == today:
+	// 			// 如果签到时间是今天
+	// 			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
+	// 			if file.IsExist(drawedFile) {
+	// 				ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+	// 			}
+	// 			return
+	// 		case siUpdateTimeStr != today:
+	// 			// 如果是跨天签到就清数据
+	// 			err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
+	// 			if err != nil {
+	// 				ctx.SendChain(message.Text("ERROR: ", err))
+	// 				return
+	// 			}
+	// 		}
+	// 		// 更新签到次数
+	// 		err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		// 更新经验
+	// 		level := sdb.GetScoreByUID(uid).Score + 1
+	// 		if level > SCOREMAX {
+	// 			level = SCOREMAX
+	// 			ctx.SendChain(message.At(uid), message.Text("你的等级已经达到上限"))
+	// 		}
+	// 		err = sdb.InsertOrUpdateScoreByUID(uid, level)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		// 更新钱包
+	// 		rank := getrank(level)
+	// 		add := 1 + rand.Intn(10) + rank*5 // 等级越高获得的钱越高
+	// 		err = wallet.InsertWalletOf(uid, add)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		score := wallet.GetWalletOf(uid)
+	// 		// 绘图
+	// 		getAvatar, err := initPic(picFile, uid)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		back, err := gg.LoadImage(picFile)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		// 避免图片过大，最大 1280*720
+	// 		back = imgfactory.Limit(back, 1280, 720)
+	// 		imgDX := back.Bounds().Dx()
+	// 		imgDY := back.Bounds().Dy()
+	// 		canvas := gg.NewContext(imgDX, imgDY)
+	// 		// draw Aero Style
+	// 		aeroStyle := gg.NewContext(imgDX-202, imgDY-202)
+	// 		aeroStyle.DrawImage(imaging.Blur(back, 2.5), -100, -100)
+	// 		// aero draw image.
+	// 		aeroStyle.DrawRoundedRectangle(0, 0, float64(imgDX-200), float64(imgDY-200), 16)
+	// 		// SideLine
+	// 		aeroStyle.SetLineWidth(3)
+	// 		aeroStyle.SetRGBA255(255, 255, 255, 100)
+	// 		aeroStyle.StrokePreserve()
+	// 		aeroStyle.SetRGBA255(255, 255, 255, 140)
+	// 		// fill
+	// 		aeroStyle.Fill()
+	// 		// draw background
+	// 		canvas.DrawImage(back, 0, 0)
+	// 		// Aero style combine
+	// 		canvas.DrawImage(aeroStyle.Image(), 100, 100)
+	// 		canvas.Fill()
+	// 		hourWord := getHourWord(now)
+	// 		avatar, _, err := image.Decode(bytes.NewReader(getAvatar))
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		avatarf := imgfactory.Size(avatar, 200, 200)
+	// 		canvas.DrawImage(avatarf.Circle(0).Image(), 120, 120)
+	// 		// draw info(name,coin,etc)
+	// 		canvas.SetRGB255(0, 0, 0)
+	// 		data, err := file.GetLazyData(text.BoldFontFile, control.Md5File, true)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		if err = canvas.ParseFontFace(data, 50); err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		// draw head
+	// 		nickName := ctx.CardOrNickName(uid)
+	// 		canvas.DrawString(nickName, 350, 180)
+	// 		canvas.Fill()
+	// 		// main draw
+	// 		data, err = file.GetLazyData(text.FontFile, control.Md5File, true)
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		if err = canvas.ParseFontFace(data, 30); err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		canvas.DrawStringAnchored(hourWord, 350, 280, 0, 0)
+	// 		canvas.DrawStringAnchored("金币 + "+strconv.Itoa(add), 350, 350, 0, 0)
+	// 		canvas.DrawStringAnchored("当前金币："+strconv.Itoa(score), 350, 400, 0, 0)
+	// 		canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(level)), 350, 450, 0, 0)
+	// 		// draw Info(Time,etc.)
+	// 		getTime := time.Now().Format("2006-01-02 15:04:05")
+	// 		getTimeLengthWidth, getTimeLengthHight := canvas.MeasureString(getTime)
+	// 		canvas.DrawStringAnchored(getTime, float64(imgDX)-100-20-getTimeLengthWidth/2, float64(imgDY)-100-getTimeLengthHight, 0.5, 0.5) // time
+	// 		var nextrankScore int
+	// 		if rank < 10 {
+	// 			nextrankScore = rankArray[rank+1]
+	// 		} else {
+	// 			nextrankScore = SCOREMAX
+	// 		}
+	// 		nextLevelStyle := strconv.Itoa(level) + "/" + strconv.Itoa(nextrankScore)
+	// 		getLevelLength, _ := canvas.MeasureString(nextLevelStyle)
+	// 		canvas.DrawStringAnchored(nextLevelStyle, 100+getLevelLength, float64(imgDY)-100-getTimeLengthHight, 0.5, 0.5) // time
+	// 		canvas.Fill()
+	// 		canvas.SetRGB255(255, 255, 255)
+	// 		if err = canvas.ParseFontFace(data, 20); err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		canvas.DrawStringAnchored("Created By Zerobot-Plugin "+banner.Version, float64(imgDX)/2, float64(imgDY)-20, 0.5, 0.5) // zbp
+	// 		canvas.SetRGB255(0, 0, 0)
+	// 		canvas.DrawStringAnchored("Created By Zerobot-Plugin "+banner.Version, float64(imgDX)/2-3, float64(imgDY)-19, 0.5, 0.5) // zbp
+	// 		canvas.SetRGB255(255, 255, 255)
+	// 		// Gradient
+	// 		grad := gg.NewLinearGradient(20, 320, 400, 20)
+	// 		grad.AddColorStop(0, color.RGBA{G: 255, A: 255})
+	// 		grad.AddColorStop(1, color.RGBA{B: 255, A: 255})
+	// 		grad.AddColorStop(0.5, color.RGBA{R: 255, A: 255})
+	// 		canvas.SetStrokeStyle(grad)
+	// 		canvas.SetLineWidth(4)
+	// 		// level array with rectangle work.
+	// 		gradLineLength := float64(imgDX-120) - 120
+	// 		renderLine := (float64(level) / float64(nextrankScore)) * gradLineLength
+	// 		canvas.MoveTo(120, float64(imgDY)-102)
+	// 		canvas.LineTo(120+renderLine, float64(imgDY)-102)
+	// 		canvas.ClosePath()
+	// 		canvas.Stroke()
+	// 		// done.
+	// 		f, err := os.Create(drawedFile)
+	// 		if err != nil {
+	// 			data, err := imgfactory.ToBytes(canvas.Image())
+	// 			if err != nil {
+	// 				ctx.SendChain(message.Text("ERROR: ", err))
+	// 				return
+	// 			}
+	// 			ctx.SendChain(message.ImageBytes(data))
+	// 			return
+	// 		}
+	// 		_, err = imgfactory.WriteTo(canvas.Image(), f)
+	// 		_ = f.Close()
+	// 		if err != nil {
+	// 			ctx.SendChain(message.Text("ERROR: ", err))
+	// 			return
+	// 		}
+	// 		ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+	// 	})
 	engine.OnFullMatch("签到").Limit(ctxext.LimitByUser).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			uid := ctx.Event.UserID
@@ -69,26 +245,26 @@ func init() {
 			drawedFile := cachePath + strconv.FormatInt(uid, 10) + today + "signin.png"
 			picFile := cachePath + strconv.FormatInt(uid, 10) + today + ".png"
 			// 获取签到时间
-			si := sdb.GetSignInByUID(uid)
-			siUpdateTimeStr := si.UpdatedAt.Format("20060102")
-			switch {
-			case si.Count >= signinMax && siUpdateTimeStr == today:
-				// 如果签到时间是今天
-				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
-				if file.IsExist(drawedFile) {
-					ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
-				}
+			// si := sdb.GetSignInByUID(uid)
+			// siUpdateTimeStr := si.UpdatedAt.Format("20060102")
+			// switch {
+			// case si.Count >= signinMax && siUpdateTimeStr == today:
+			// 	// 如果签到时间是今天
+			// 	ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
+			// 	if file.IsExist(drawedFile) {
+			// 		ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+			// 	}
+			// 	return
+			// case siUpdateTimeStr != today:
+			// 如果是跨天签到就清数据
+			err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
+			if err != nil {
+				ctx.SendChain(message.Text("ERROR: ", err))
 				return
-			case siUpdateTimeStr != today:
-				// 如果是跨天签到就清数据
-				err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
-				if err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
-					return
-				}
 			}
+			// }
 			// 更新签到次数
-			err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
+			// err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
@@ -129,74 +305,67 @@ func init() {
 			imgDX := back.Bounds().Dx()
 			imgDY := back.Bounds().Dy()
 			canvas := gg.NewContext(imgDX, imgDY)
-			// draw Aero Style
-			aeroStyle := gg.NewContext(imgDX-202, imgDY-202)
-			aeroStyle.DrawImage(imaging.Blur(back, 2.5), -100, -100)
-			// aero draw image.
-			aeroStyle.DrawRoundedRectangle(0, 0, float64(imgDX-200), float64(imgDY-200), 16)
-			// SideLine
-			aeroStyle.SetLineWidth(3)
-			aeroStyle.SetRGBA255(255, 255, 255, 100)
-			aeroStyle.StrokePreserve()
-			aeroStyle.SetRGBA255(255, 255, 255, 140)
-			// fill
-			aeroStyle.Fill()
+
 			// draw background
 			canvas.DrawImage(back, 0, 0)
-			// Aero style combine
-			canvas.DrawImage(aeroStyle.Image(), 100, 100)
-			canvas.Fill()
+
+			// Create smaller Aero Style boxes
+			createAeroBox := func(x, y, width, height float64) {
+				aeroStyle := gg.NewContext(int(width), int(height))
+				// aeroStyle.DrawImage(imaging.Blur(back.SubImage(image.Rect(int(x), int(y), int(x+width), int(y+height))), 2.5), 0, 0)
+				aeroStyle.DrawRoundedRectangle(0, 0, width, height, 8)
+				aeroStyle.SetLineWidth(2)
+				aeroStyle.SetRGBA255(255, 255, 255, 100)
+				aeroStyle.StrokePreserve()
+				aeroStyle.SetRGBA255(255, 255, 255, 140)
+				aeroStyle.Fill()
+				canvas.DrawImage(aeroStyle.Image(), int(x), int(y))
+			}
+
+			// Draw Aero boxes for text and avatar
+			createAeroBox(20, 20, 180, 95)                                // left top
+			createAeroBox(20, float64(imgDY-120), 180, 100)               // left bottom
+			createAeroBox(float64(imgDX-260), float64(imgDY-60), 240, 40) // right bottom
+			// createAeroBox(float64(imgDX-220), 20, 200, 200)                // right top (avatar)
+
 			hourWord := getHourWord(now)
 			avatar, _, err := image.Decode(bytes.NewReader(getAvatar))
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			avatarf := imgfactory.Size(avatar, 200, 200)
-			canvas.DrawImage(avatarf.Circle(0).Image(), 120, 120)
-			// draw info(name,coin,etc)
+			avatarf := imgfactory.Size(avatar, 140, 140)
+			canvas.DrawImage(avatarf.Circle(0).Image(), imgDX-160, 20)
+
+			// draw info(name, coin, etc)
 			canvas.SetRGB255(0, 0, 0)
-			data, err := file.GetLazyData(text.BoldFontFile, control.Md5File, true)
+			data, err := file.GetLazyData(text.MaokenFontFile, control.Md5File, true)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			if err = canvas.ParseFontFace(data, 50); err != nil {
+			if err = canvas.ParseFontFace(data, 24); err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			// draw head
 			nickName := ctx.CardOrNickName(uid)
-			canvas.DrawString(nickName, 350, 180)
-			canvas.Fill()
-			// main draw
-			data, err = file.GetLazyData(text.FontFile, control.Md5File, true)
-			if err != nil {
+			canvas.DrawString(nickName, 40, 60)
+			canvas.DrawStringAnchored(hourWord, 40, 100, 0, 0)
+
+			if err = canvas.ParseFontFace(data, 20); err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			if err = canvas.ParseFontFace(data, 30); err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			canvas.DrawStringAnchored(hourWord, 350, 280, 0, 0)
-			canvas.DrawStringAnchored("金币 + "+strconv.Itoa(add), 350, 350, 0, 0)
-			canvas.DrawStringAnchored("当前金币："+strconv.Itoa(score), 350, 400, 0, 0)
-			canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(level)), 350, 450, 0, 0)
-			// draw Info(Time,etc.)
+			canvas.DrawStringAnchored("金币 + "+strconv.Itoa(add), 40, float64(imgDY-90), 0, 0)
+			canvas.DrawStringAnchored("当前金币："+strconv.Itoa(score), 40, float64(imgDY-60), 0, 0)
+			canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(level)), 40, float64(imgDY-30), 0, 0)
+
+			// Draw Info(Time, etc.)
 			getTime := time.Now().Format("2006-01-02 15:04:05")
-			getTimeLengthWidth, getTimeLengthHight := canvas.MeasureString(getTime)
-			canvas.DrawStringAnchored(getTime, float64(imgDX)-100-20-getTimeLengthWidth/2, float64(imgDY)-100-getTimeLengthHight, 0.5, 0.5) // time
-			var nextrankScore int
-			if rank < 10 {
-				nextrankScore = rankArray[rank+1]
-			} else {
-				nextrankScore = SCOREMAX
-			}
-			nextLevelStyle := strconv.Itoa(level) + "/" + strconv.Itoa(nextrankScore)
-			getLevelLength, _ := canvas.MeasureString(nextLevelStyle)
-			canvas.DrawStringAnchored(nextLevelStyle, 100+getLevelLength, float64(imgDY)-100-getTimeLengthHight, 0.5, 0.5) // time
-			canvas.Fill()
+			// getTimeLengthWidth, getTimeLengthHight := canvas.MeasureString(getTime)
+			canvas.DrawStringAnchored(getTime, float64(imgDX)-140, float64(imgDY)-40, 0.5, 0.5) // time
+
+			// Draw Zerobot-Plugin information
 			canvas.SetRGB255(255, 255, 255)
 			if err = canvas.ParseFontFace(data, 20); err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
@@ -206,20 +375,7 @@ func init() {
 			canvas.SetRGB255(0, 0, 0)
 			canvas.DrawStringAnchored("Created By Zerobot-Plugin "+banner.Version, float64(imgDX)/2-3, float64(imgDY)-19, 0.5, 0.5) // zbp
 			canvas.SetRGB255(255, 255, 255)
-			// Gradient
-			grad := gg.NewLinearGradient(20, 320, 400, 20)
-			grad.AddColorStop(0, color.RGBA{G: 255, A: 255})
-			grad.AddColorStop(1, color.RGBA{B: 255, A: 255})
-			grad.AddColorStop(0.5, color.RGBA{R: 255, A: 255})
-			canvas.SetStrokeStyle(grad)
-			canvas.SetLineWidth(4)
-			// level array with rectangle work.
-			gradLineLength := float64(imgDX-120) - 120
-			renderLine := (float64(level) / float64(nextrankScore)) * gradLineLength
-			canvas.MoveTo(120, float64(imgDY)-102)
-			canvas.LineTo(120+renderLine, float64(imgDY)-102)
-			canvas.ClosePath()
-			canvas.Stroke()
+
 			// done.
 			f, err := os.Create(drawedFile)
 			if err != nil {
