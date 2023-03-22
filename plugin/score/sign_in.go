@@ -245,26 +245,26 @@ func init() {
 			drawedFile := cachePath + strconv.FormatInt(uid, 10) + today + "signin.png"
 			picFile := cachePath + strconv.FormatInt(uid, 10) + today + ".png"
 			// 获取签到时间
-			// si := sdb.GetSignInByUID(uid)
-			// siUpdateTimeStr := si.UpdatedAt.Format("20060102")
-			// switch {
-			// case si.Count >= signinMax && siUpdateTimeStr == today:
-			// 	// 如果签到时间是今天
-			// 	ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
-			// 	if file.IsExist(drawedFile) {
-			// 		ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
-			// 	}
-			// 	return
-			// case siUpdateTimeStr != today:
-			// 如果是跨天签到就清数据
-			err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
-			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
+			si := sdb.GetSignInByUID(uid)
+			siUpdateTimeStr := si.UpdatedAt.Format("20060102")
+			switch {
+			case si.Count >= signinMax && siUpdateTimeStr == today:
+				// 如果签到时间是今天
+				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
+				if file.IsExist(drawedFile) {
+					ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+				}
 				return
+			case siUpdateTimeStr != today:
+				// 如果是跨天签到就清数据
+				err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
+				if err != nil {
+					ctx.SendChain(message.Text("ERROR: ", err))
+					return
+				}
 			}
-			// }
 			// 更新签到次数
-			// err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
+			err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
@@ -323,8 +323,8 @@ func init() {
 			}
 
 			// Draw Aero boxes for text and avatar
-			createAeroBox(20, 20, 180, 95)                                // left top
-			createAeroBox(20, float64(imgDY-120), 180, 100)               // left bottom
+			createAeroBox(20, 40, 300, 100)                               // left top
+			createAeroBox(20, float64(imgDY-120), 300, 100)               // left bottom
 			createAeroBox(float64(imgDX-260), float64(imgDY-60), 240, 40) // right bottom
 			// createAeroBox(float64(imgDX-220), 20, 200, 200)                // right top (avatar)
 
@@ -334,8 +334,8 @@ func init() {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			avatarf := imgfactory.Size(avatar, 140, 140)
-			canvas.DrawImage(avatarf.Circle(0).Image(), imgDX-160, 20)
+			avatarf := imgfactory.Size(avatar, 100, 100)
+			canvas.DrawImage(avatarf.Circle(0).Image(), 40, 20)
 
 			// draw info(name, coin, etc)
 			canvas.SetRGB255(0, 0, 0)
@@ -349,8 +349,8 @@ func init() {
 				return
 			}
 			nickName := ctx.CardOrNickName(uid)
-			canvas.DrawString(nickName, 40, 60)
-			canvas.DrawStringAnchored(hourWord, 40, 100, 0, 0)
+			canvas.DrawString(nickName, 150, 80)
+			canvas.DrawStringAnchored(hourWord, 150, 120, 0, 0)
 
 			if err = canvas.ParseFontFace(data, 20); err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
