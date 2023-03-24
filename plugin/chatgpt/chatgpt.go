@@ -11,7 +11,8 @@ import (
 
 const (
 	// baseURL  = "https://api.openai.com/v1/"
-	proxyURL           = "https://openai-api.impart.icu/"
+	proxyURL = "https://openai.geekr.cool/v1/"
+	//  proxyURL           = "https://openai-api.impart.icu/"
 	modelGPT3Dot5Turbo = "gpt-3.5-turbo"
 )
 
