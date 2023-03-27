@@ -19,9 +19,9 @@ import (
 )
 
 func init() {
-	engine := control.Register("autothesaurus", &ctrl.Options[*zero.Ctx]{
+	engine := control.Register("thesaurus", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault: false,
-		Brief:            "自动词典匹配回复",
+		Brief:            "词典匹配回复",
 		Help:             "- 切换[kimo|傲娇|可爱]词库\n- 设置词库触发概率0.x (0<x<9)",
 		PublicDataFolder: "Chat",
 	})
@@ -146,10 +146,7 @@ const (
 
 func match(l []string, seg *jieba.Segmenter) zero.Rule {
 	return func(ctx *zero.Ctx) bool {
-		if zero.FullMatchRule(l...)(ctx) {
-			return true
-		}
-		return ctxext.JiebaFullMatch(seg, func(ctx *zero.Ctx) string {
+		return ctxext.JiebaSimilarity(0.8, seg, func(ctx *zero.Ctx) string {
 			return ctx.ExtractPlainText()
 		}, l...)(ctx)
 	}

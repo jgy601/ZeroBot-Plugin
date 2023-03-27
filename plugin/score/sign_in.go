@@ -1,8 +1,7 @@
-// Package score 签到 by夹子+gpt4+苜蓿紫
+// Package score 签到，答题得分
 package score
 
 import (
-	"bytes"
 	"image"
 	"math"
 	"math/rand"
@@ -10,14 +9,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/FloatTech/ZeroBot-Plugin/kanban/banner"
-
 	"github.com/FloatTech/AnimeAPI/bilibili"
 	"github.com/FloatTech/AnimeAPI/wallet"
+	fcext "github.com/FloatTech/floatbox/ctxext"
 	"github.com/FloatTech/floatbox/file"
 	"github.com/FloatTech/floatbox/process"
 	"github.com/FloatTech/floatbox/web"
-	"github.com/FloatTech/gg"
 	"github.com/FloatTech/imgfactory"
 	ctrl "github.com/FloatTech/zbpctrl"
 	"github.com/FloatTech/zbputils/control"
@@ -34,7 +31,8 @@ const (
 	referer       = "https://weibo.com/"
 	signinMax     = 1
 	// SCOREMAX 分数上限定为1200
-	SCOREMAX = 1200
+	SCOREMAX       = 1200
+	defKeyID int64 = -6
 )
 
 var (
@@ -42,8 +40,19 @@ var (
 	engine    = control.Register("score", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault:  false,
 		Brief:             "签到",
-		Help:              "- 签到\n- (获得|获取)签到背景[@xxx] | (获得|获取)签到背景\n- 查看等级排名\n注:为跨群排名\n- 查看我的钱包\n- 查看钱包排名\n注:为本群排行，若群人数太多不建议使用该功能!!!",
+		Help:              "- 签到\n- 获得签到背景[@xxx] | 获得签到背景\n- 设置[默认]签到预设(1~9)\n- 查看等级排名\n注:为跨群排名\n- 查看我的钱包\n- 查看钱包排名\n注:为本群排行，若群人数太多不建议使用该功能!!!",
 		PrivateDataFolder: "score",
+	})
+	initDef = fcext.DoOnceOnSuccess(func(ctx *zero.Ctx) bool {
+		var defkey string
+		m := ctx.State["manager"].(*ctrl.Control[*zero.Ctx])
+		_ = m.Manager.Response(defKeyID)
+		_ = m.Manager.GetExtra(defKeyID, &defkey)
+		if defkey == "" {
+			_ = m.Manager.SetExtra(defKeyID, "1")
+			return true
+		}
+		return true
 	})
 )
 
@@ -57,181 +66,131 @@ func init() {
 		}
 		sdb = initialize(engine.DataFolder() + "score.db")
 	}()
-
-	engine.OnFullMatch("签到").Limit(ctxext.LimitByUser).SetBlock(true).
-		Handle(func(ctx *zero.Ctx) {
-			uid := ctx.Event.UserID
-			now := time.Now()
-			today := now.Format("20060102")
-			// 签到图片
-			drawedFile := cachePath + strconv.FormatInt(uid, 10) + today + "signin.png"
-			picFile := cachePath + strconv.FormatInt(uid, 10) + today + ".png"
-			// 获取签到时间
-			si := sdb.GetSignInByUID(uid)
-			siUpdateTimeStr := si.UpdatedAt.Format("20060102")
-			switch {
-			case si.Count >= signinMax && siUpdateTimeStr == today:
-				// 如果签到时间是今天
-				ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
-				if file.IsExist(drawedFile) {
-					ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
-				}
-				return
-			case siUpdateTimeStr != today:
-				// 如果是跨天签到就清数据
-				err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
-				if err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
-					return
-				}
+	engine.OnRegex(`^签到\s?(\d*)$`, initDef).Limit(ctxext.LimitByUser).SetBlock(true).Handle(func(ctx *zero.Ctx) {
+		// 选择key
+		var key string
+		gid := ctx.Event.GroupID
+		if gid < 0 {
+			// 个人用户设为负数
+			gid = -ctx.Event.UserID
+		}
+		if ctx.State["regex_matched"].([]string)[1] != "" {
+			key = ctx.State["regex_matched"].([]string)[1]
+		} else {
+			m := ctx.State["manager"].(*ctrl.Control[*zero.Ctx])
+			_ = m.Manager.GetExtra(gid, &key)
+			if key == "" {
+				_ = m.Manager.GetExtra(defKeyID, &key)
 			}
-			// 更新签到次数
-			err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
+		}
+		if !isExist(key) {
+			ctx.SendChain(message.Text("未找到签到设定:", key)) //避免签到配置错误造成无图发送,但是已经签到的情况
+			return
+		}
+		uid := ctx.Event.UserID
+		today := time.Now().Format("20060102")
+		// 签到图片
+		drawedFile := cachePath + strconv.FormatInt(uid, 10) + today + "signin.png"
+		picFile := cachePath + strconv.FormatInt(uid, 10) + today + ".png"
+		// 获取签到时间
+		si := sdb.GetSignInByUID(uid)
+		siUpdateTimeStr := si.UpdatedAt.Format("20060102")
+		switch {
+		case si.Count >= signinMax && siUpdateTimeStr == today:
+			// 如果签到时间是今天
+			ctx.SendChain(message.Reply(ctx.Event.MessageID), message.Text("今天你已经签到过了！"))
+			if file.IsExist(drawedFile) {
+				ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+			}
+			return
+		case siUpdateTimeStr != today:
+			// 如果是跨天签到就清数据
+			err := sdb.InsertOrUpdateSignInCountByUID(uid, 0)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			// 更新经验
-			level := sdb.GetScoreByUID(uid).Score + 1
-			if level > SCOREMAX {
-				level = SCOREMAX
-				ctx.SendChain(message.At(uid), message.Text("你的等级已经达到上限"))
-			}
-			err = sdb.InsertOrUpdateScoreByUID(uid, level)
+		}
+		// 更新签到次数
+		err := sdb.InsertOrUpdateSignInCountByUID(uid, si.Count+1)
+		if err != nil {
+			ctx.SendChain(message.Text("ERROR: ", err))
+			return
+		}
+		// 更新经验
+		level := sdb.GetScoreByUID(uid).Score + 1
+		if level > SCOREMAX {
+			level = SCOREMAX
+			ctx.SendChain(message.At(uid), message.Text("你的等级已经达到上限"))
+		}
+		err = sdb.InsertOrUpdateScoreByUID(uid, level)
+		if err != nil {
+			ctx.SendChain(message.Text("ERROR: ", err))
+			return
+		}
+		// 更新钱包
+		rank := getrank(level)
+		add := 1 + rand.Intn(10) + rank*5 // 等级越高获得的钱越高
+		err = wallet.InsertWalletOf(uid, add)
+		if err != nil {
+			ctx.SendChain(message.Text("ERROR: ", err))
+			return
+		}
+		alldata := scdata{
+			drawedfile: drawedFile,
+			picfile:    picFile,
+			uid:        uid,
+			nickname:   ctx.CardOrNickName(uid),
+			inc:        add,
+			score:      wallet.GetWalletOf(uid),
+			level:      level,
+			rank:       rank,
+		}
+		var drawimage image.Image
+		switch key {
+		case "1":
+			drawimage, err = drawScore16(&alldata)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			// 更新钱包
-			rank := getrank(level)
-			add := 1 + rand.Intn(10) + rank*5 // 等级越高获得的钱越高
-			err = wallet.InsertWalletOf(uid, add)
+		case "2":
+			drawimage, err = drawScore15(&alldata)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			score := wallet.GetWalletOf(uid)
-			// 绘图
-			getAvatar, err := initPic(picFile, uid)
+		case "3":
+			drawimage, err = drawScore17(&alldata)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			back, err := gg.LoadImage(picFile)
+		default:
+			ctx.SendChain(message.Text("未添加签到设定:", key))
+			return
+		}
+		// done.
+		f, err := os.Create(drawedFile)
+		if err != nil {
+			data, err := imgfactory.ToBytes(drawimage)
 			if err != nil {
 				ctx.SendChain(message.Text("ERROR: ", err))
 				return
 			}
-			// 避免图片过大，最大 1280*720
-			back = imgfactory.Limit(back, 1280, 720)
-			imgDX := back.Bounds().Dx()
-			imgDY := back.Bounds().Dy()
-			canvas := gg.NewContext(imgDX, imgDY)
+			ctx.SendChain(message.ImageBytes(data))
+			return
+		}
+		_, err = imgfactory.WriteTo(drawimage, f)
+		_ = f.Close()
+		if err != nil {
+			ctx.SendChain(message.Text("ERROR: ", err))
+			return
+		}
+		ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
+	})
 
-			// draw background
-			canvas.DrawImage(back, 0, 0)
-
-			// Create smaller Aero Style boxes
-			createAeroBox := func(x, y, width, height float64) {
-				aeroStyle := gg.NewContext(int(width), int(height))
-				aeroStyle.DrawRoundedRectangle(0, 0, width, height, 8)
-				aeroStyle.SetLineWidth(2)
-				aeroStyle.SetRGBA255(255, 255, 255, 100)
-				aeroStyle.StrokePreserve()
-				aeroStyle.SetRGBA255(255, 255, 255, 140)
-				aeroStyle.Fill()
-				canvas.DrawImage(aeroStyle.Image(), int(x), int(y))
-			}
-
-			// draw aero boxes for text
-			createAeroBox(20, float64(imgDY-120), 280, 100)               // left bottom
-			createAeroBox(float64(imgDX-272), float64(imgDY-60), 252, 40) // right bottom
-
-			// draw info(name, coin, etc)
-			hourWord := getHourWord(now)
-			canvas.SetRGB255(0, 0, 0)
-			data, err := file.GetLazyData(text.MaokenFontFile, control.Md5File, true)
-			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			if err = canvas.ParseFontFace(data, 24); err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			nickName := ctx.CardOrNickName(uid)
-			getNameLengthWidth, _ := canvas.MeasureString(nickName)
-			// draw aero box
-			if getNameLengthWidth > 140 {
-				createAeroBox(20, 40, 140+getNameLengthWidth, 100) // left top
-			} else {
-				createAeroBox(20, 40, 280, 100) // left top
-			}
-
-			// draw avatar
-			avatar, _, err := image.Decode(bytes.NewReader(getAvatar))
-			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			avatarf := imgfactory.Size(avatar, 100, 100)
-			canvas.DrawImage(avatarf.Circle(0).Image(), 30, 20)
-
-			canvas.DrawString(nickName, 140, 80)
-			canvas.DrawStringAnchored(hourWord, 140, 120, 0, 0)
-
-			if err = canvas.ParseFontFace(data, 20); err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			canvas.DrawStringAnchored("金币 + "+strconv.Itoa(add), 40, float64(imgDY-90), 0, 0)
-			canvas.DrawStringAnchored("当前金币："+strconv.Itoa(score), 40, float64(imgDY-60), 0, 0)
-			canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(level)), 40, float64(imgDY-30), 0, 0)
-
-			// Draw Info(Time, etc.)
-			getTime := time.Now().Format("2006-01-02 15:04:05")
-			canvas.DrawStringAnchored(getTime, float64(imgDX)-146, float64(imgDY)-40, 0.5, 0.5) // time
-			var nextrankScore int
-			if rank < 10 {
-				nextrankScore = rankArray[rank+1]
-			} else {
-				nextrankScore = SCOREMAX
-			}
-			nextLevelStyle := strconv.Itoa(level) + "/" + strconv.Itoa(nextrankScore)
-			canvas.DrawStringAnchored(nextLevelStyle, 190, float64(imgDY-30), 0, 0) // time
-
-			// Draw Zerobot-Plugin information
-			canvas.SetRGB255(255, 255, 255)
-			if err = canvas.ParseFontFace(data, 20); err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			canvas.DrawStringAnchored("Created By Zerobot-Plugin "+banner.Version, float64(imgDX)/2, float64(imgDY)-20, 0.5, 0.5) // zbp
-			canvas.SetRGB255(0, 0, 0)
-			canvas.DrawStringAnchored("Created By Zerobot-Plugin "+banner.Version, float64(imgDX)/2-3, float64(imgDY)-19, 0.5, 0.5) // zbp
-			canvas.SetRGB255(255, 255, 255)
-
-			// done.
-			f, err := os.Create(drawedFile)
-			if err != nil {
-				data, err := imgfactory.ToBytes(canvas.Image())
-				if err != nil {
-					ctx.SendChain(message.Text("ERROR: ", err))
-					return
-				}
-				ctx.SendChain(message.ImageBytes(data))
-				return
-			}
-			_, err = imgfactory.WriteTo(canvas.Image(), f)
-			_ = f.Close()
-			if err != nil {
-				ctx.SendChain(message.Text("ERROR: ", err))
-				return
-			}
-			ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
-		})
-
-	engine.OnPrefixGroup([]string{"获得签到背景", "获取签到背景", "签到背景"}, zero.OnlyGroup).Limit(ctxext.LimitByGroup).SetBlock(true).
+	engine.OnPrefix("获得签到背景", zero.OnlyGroup).Limit(ctxext.LimitByGroup).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			param := ctx.State["args"].(string)
 			var uidStr string
@@ -319,21 +278,46 @@ func init() {
 			}
 			ctx.SendChain(message.Image("file:///" + file.BOTPATH + "/" + drawedFile))
 		})
+	engine.OnRegex(`^设置(默认)?签到预设\s?(\d*)$`, zero.SuperUserPermission).Limit(ctxext.LimitByUser).SetBlock(true).Handle(func(ctx *zero.Ctx) {
+		if ctx.State["regex_matched"].([]string)[2] == "" {
+			ctx.SendChain(message.Text("设置失败,数据为空"))
+		} else {
+			s := ctx.State["regex_matched"].([]string)[1]
+			key := ctx.State["regex_matched"].([]string)[2]
+			if !isExist(key) {
+				ctx.SendChain(message.Text("未找到签到设定:", key)) //避免签到配置错误
+				return
+			}
+			gid := ctx.Event.GroupID
+			if gid == 0 {
+				gid = -ctx.Event.UserID
+			}
+			if s != "" {
+				gid = defKeyID
+			}
+			err := ctx.State["manager"].(*ctrl.Control[*zero.Ctx]).Manager.SetExtra(gid, key)
+			if err != nil {
+				ctx.SendChain(message.Text("ERROR: ", err))
+				return
+			}
+			ctx.SendChain(message.Text("设置成功,当前", s, "预设为:", key))
+		}
+	})
 }
 
 func getHourWord(t time.Time) string {
 	h := t.Hour()
 	switch {
 	case 6 <= h && h < 12:
-		return "早上好！"
+		return "早上好"
 	case 12 <= h && h < 14:
-		return "中午好！"
+		return "中午好"
 	case 14 <= h && h < 19:
-		return "下午好！"
+		return "下午好"
 	case 19 <= h && h < 24:
-		return "晚上好！"
+		return "晚上好"
 	case 0 <= h && h < 6:
-		return "凌晨好！"
+		return "凌晨好"
 	default:
 		return ""
 	}
@@ -368,4 +352,11 @@ func initPic(picFile string, uid int64) (avatar []byte, err error) {
 		return nil, err
 	}
 	return avatar, os.WriteFile(picFile, data, 0644)
+}
+
+func isExist(key string) bool {
+	if key != "1" && key != "2" && key != "3" {
+		return false
+	}
+	return true
 }
