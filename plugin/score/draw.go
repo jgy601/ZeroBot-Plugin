@@ -1,4 +1,4 @@
-// Package score 签到，答题得分
+// Package score 签到
 package score
 
 import (
@@ -213,7 +213,7 @@ func drawScore17(a *scdata) (image.Image, error) {
 	// draw info(name, coin, etc)
 	hourWord := getHourWord(time.Now())
 	canvas.SetRGB255(0, 0, 0)
-	data, err := file.GetLazyData(text.BoldFontFile, control.Md5File, true)
+	data, err := file.GetLazyData(text.MaokenFontFile, control.Md5File, true)
 	if err != nil {
 		return nil, err
 	}
@@ -242,8 +242,8 @@ func drawScore17(a *scdata) (image.Image, error) {
 	if err = canvas.ParseFontFace(data, 20); err != nil {
 		return nil, err
 	}
-	canvas.DrawStringAnchored("金币 + "+strconv.Itoa(a.inc), 40, float64(imgDY-90), 0, 0)
-	canvas.DrawStringAnchored("当前金币："+strconv.Itoa(a.score), 40, float64(imgDY-60), 0, 0)
+	canvas.DrawStringAnchored("ATRI币 + "+strconv.Itoa(a.inc), 40, float64(imgDY-90), 0, 0)
+	canvas.DrawStringAnchored("当前ATRI币："+strconv.Itoa(a.score), 40, float64(imgDY-60), 0, 0)
 	canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(a.level)), 40, float64(imgDY-30), 0, 0)
 
 	// Draw Info(Time, etc.)

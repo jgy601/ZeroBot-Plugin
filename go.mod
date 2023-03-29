@@ -12,7 +12,7 @@ require (
 	github.com/FloatTech/sqlite v1.6.0
 	github.com/FloatTech/ttl v0.0.0-20230307105452-d6f7b2b647d1
 	github.com/FloatTech/zbpctrl v1.5.3-0.20230316111343-dd078fa43fe3
-	github.com/FloatTech/zbputils v1.6.2-0.20230316111555-2d1ec958de04
+	github.com/FloatTech/zbputils v1.6.2-0.20230320041820-731f824ff8f4
 	github.com/RomiChan/syncx v0.0.0-20221202055724-5f842c53020e
 	github.com/RomiChan/websocket v1.4.3-0.20220227141055-9b2c6168c9c5
 	github.com/antchfx/htmlquery v1.3.0
@@ -24,7 +24,6 @@ require (
 	github.com/fumiama/go-base16384 v1.6.4
 	github.com/fumiama/go-registry v0.2.6
 	github.com/fumiama/gotracemoe v0.0.3
-	github.com/fumiama/imgsz v0.0.2 // indirect
 	github.com/fumiama/jieba v0.0.0-20221203025406-36c17a10b565
 	github.com/fumiama/unibase2n v0.0.0-20221020155353-02876e777430
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
@@ -60,7 +59,8 @@ require (
 	github.com/faiface/beep v1.1.0 // indirect
 	github.com/fumiama/go-simple-protobuf v0.1.0 // indirect
 	github.com/fumiama/gofastTEA v0.0.10 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
+	github.com/fumiama/imgsz v0.0.2 // indirect
+	github.com/gabriel-vasile/mimetype v1.0.4 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
@@ -80,7 +80,6 @@ require (
 	github.com/playwright-community/playwright-go v0.2000.1
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
-	github.com/quic-go/qtls-go1-18 v0.2.0 // indirect
 	github.com/quic-go/qtls-go1-19 v0.3.0 // indirect
 	github.com/quic-go/qtls-go1-20 v0.2.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
