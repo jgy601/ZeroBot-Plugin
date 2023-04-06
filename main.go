@@ -90,7 +90,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/emojimix"     // 合成emoji
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/event"        // 好友申请群聊邀请事件处理
 
-	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/font"          // 渲染任意文字到图片
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/font"    // 渲染任意文字到图片
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/fortune" // 运势
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/funny"   // 笑话
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/genshin" // 原神抽卡
