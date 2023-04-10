@@ -245,8 +245,8 @@ func drawScore17(a *scdata) (image.Image, error) {
 	if err = canvas.ParseFontFace(data, 20); err != nil {
 		return nil, err
 	}
-	canvas.DrawStringAnchored("ATRI币 + "+strconv.Itoa(a.inc), 40, float64(imgDY-90), 0, 0)
-	canvas.DrawStringAnchored("当前ATRI币："+strconv.Itoa(a.score), 40, float64(imgDY-60), 0, 0)
+	canvas.DrawStringAnchored("金币 + "+strconv.Itoa(a.inc), 40, float64(imgDY-90), 0, 0)
+	canvas.DrawStringAnchored("当前金币："+strconv.Itoa(a.score), 40, float64(imgDY-60), 0, 0)
 	canvas.DrawStringAnchored("LEVEL: "+strconv.Itoa(getrank(a.level)), 40, float64(imgDY-30), 0, 0)
 
 	// Draw Info(Time, etc.)
@@ -274,7 +274,7 @@ func drawScore17(a *scdata) (image.Image, error) {
 }
 
 func drawScore17b2(a *scdata) (img image.Image, err error) {
-	fontdata, err := file.GetLazyData(text.GlowSansFontFile, control.Md5File, false)
+	fontdata, err := file.GetLazyData(text.MaokenFontFile, control.Md5File, false)
 	if err != nil {
 		return
 	}
@@ -475,7 +475,7 @@ func customtext(a *scdata, fontdata []byte, cw, ch, aw float64, textcolor color.
 		return
 	}
 
-	canvas.DrawStringAnchored("ATRI币 + "+strconv.Itoa(a.inc), ((cw-scw)-(cw/3-scw/2))/8, (ch-sch)/2+sch/4+tempfh, 0, 0.5)
+	canvas.DrawStringAnchored("金币 + "+strconv.Itoa(a.inc), ((cw-scw)-(cw/3-scw/2))/8, (ch-sch)/2+sch/4+tempfh, 0, 0.5)
 	canvas.DrawStringAnchored("EXP + 1", ((cw-scw)-(cw/3-scw/2))/8, (ch-sch)/2+sch/4+tempfh+canvas.FontHeight(), 0, 1)
 
 	err = canvas.ParseFontFace(fontdata, (ch-sch)/2/4)
@@ -483,7 +483,7 @@ func customtext(a *scdata, fontdata []byte, cw, ch, aw float64, textcolor color.
 		return
 	}
 
-	canvas.DrawStringAnchored("你有 "+strconv.Itoa(a.score)+" 枚ATRI币", ((cw-scw)-(cw/3-scw/2))/8, (ch-sch)/2+sch/4*3, 0, 0.5)
+	canvas.DrawStringAnchored("你有 "+strconv.Itoa(a.score)+" 枚金币", ((cw-scw)-(cw/3-scw/2))/8, (ch-sch)/2+sch/4*3, 0, 0.5)
 
 	img = canvas.Image()
 	return
