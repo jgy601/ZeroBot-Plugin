@@ -27,7 +27,7 @@ var (
 	engine = control.Register("chatgpt", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault: false,
 		Brief:            "chatgpt",
-		Help: "-@bot chatgpt [对话内容]\n" +
+		Help: "-@bot [对话内容]\n" +
 			"添加预设xxx xxx\n" +
 			"设置(默认)预设xxx\n" +
 			"删除本群预设\n" +

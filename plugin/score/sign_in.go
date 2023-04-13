@@ -42,9 +42,12 @@ var (
 		PrivateDataFolder: "score",
 	})
 	styles = []scoredrawer{
-		drawScore15,
-		drawScore16,
-		drawScore17,
+		// drawScore15,
+		// drawScore16,
+		// drawScore17,
+		drawScore17b2,
+		drawScore17b2,
+		drawScore17b2,
 		drawScore17b2,
 	}
 )
