@@ -181,6 +181,7 @@ import (
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"  // 派对游戏
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/playwright" // 网页截图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"     // 图片
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtb_wife"   // 抽vtb老婆
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/zbpwife"    // 用于ZeroBot-Plugin的老婆库
 
 	//                               ^^^^                               //
