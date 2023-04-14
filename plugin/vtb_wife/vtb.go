@@ -2,6 +2,7 @@
 package vtbwife
 
 import (
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -12,7 +13,6 @@ import (
 	ctrl "github.com/FloatTech/zbpctrl"
 	"github.com/FloatTech/zbputils/control"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/sirupsen/logrus"
 	zero "github.com/wdvxdr1123/ZeroBot"
 	"github.com/wdvxdr1123/ZeroBot/message"
 )
@@ -29,28 +29,26 @@ func init() { // 插件主体
 		func(ctx *zero.Ctx) bool {
 			content, err := os.ReadFile(engine.DataFolder() + "wife_list.txt") // 779分界
 			if err != nil {
-				logrus.Debugln("[vtbwife]读取vtbwife数据文件失败: ", err)
+				log.Println("[vtbwife]读取vtbwife数据文件失败: ", err)
 				return false
 			}
 			// 将文件内容转换为单词
 			keys = strings.Split(string(content), "\n")
-			logrus.Debugln("[vtbwife]加载", len(keys), "位wife数据...")
+			log.Println("[vtbwife]加载", len(keys), "位wife数据...")
 			return true
 		})).SetBlock(true).Handle(func(ctx *zero.Ctx) {
 		var key, u, b string
 		var ok bool
-		var fix int
 		for i := 0; i < 3; i++ {
-			key = keys[fcext.RandSenderPerDayN(ctx.Event.UserID, len(keys))+fix]
+			key = keys[fcext.RandSenderPerDayN(ctx.Event.UserID, len(keys))+i]
 			u, b, ok = geturl(key)
 			if !ok {
-				fix++
 				continue
 			}
 			break
 		}
 		if !ok {
-			ctx.SendChain(message.Text("获取图片链接失败"))
+			ctx.SendChain(message.Text("-获取图片链接失败"))
 			return
 		}
 		img, err := web.GetData(u)
@@ -61,10 +59,9 @@ func init() { // 插件主体
 		txt := message.Text(
 			"\n今天你的VTB老婆是: ", key,
 		)
-		bs := message.Text(
-			b,
-		)
-		ctx.SendChain(message.At(ctx.Event.UserID), txt, message.ImageBytes(img), bs)
+		if id := ctx.SendChain(message.At(ctx.Event.UserID), txt, message.ImageBytes(img), message.Text(b)); id.ID() == 0 {
+			ctx.SendChain(message.At(ctx.Event.UserID), txt, message.Text("图片发送失败...\n"), message.Text(b))
+		}
 	})
 }
 
@@ -79,7 +76,10 @@ func geturl(kword string) (u, brief string, ok bool) {
 	if err != nil {
 		return "", "", false
 	}
-	u, ok = doc.Find(".infobox-image").Attr("src")  // class加.
+	u, ok = doc.Find(".infobox-image").Attr("src") // class加.
+	doc.Find("style").Remove()
+	doc.Find("script").Remove()
+	doc.Find("big").Remove()
 	b := doc.Find(".moe-infobox").Find("tr").Text() // class加.
 	bs := strings.Split(b, "\n")
 	// 寻找"基本资料"
@@ -94,11 +94,14 @@ func geturl(kword string) (u, brief string, ok bool) {
 		}
 	}
 	for ; k < len(bs); k++ {
-		if bs[k] == "粉丝勋章" {
-			break
-		} else if bs[k] == "活动范围" || bs[k] == "Bilibili粉丝勋章" {
+		switch bs[k] {
+		case "直播关联", "制作所属", "个人数据", "名字":
+			continue
+		case "活动范围":
 			k += 2
 			continue
+		case "进入直播间":
+			bs[k] = ""
 		}
 		if t := strings.TrimSpace(bs[k]); t == "" {
 			continue
@@ -115,16 +118,3 @@ func geturl(kword string) (u, brief string, ok bool) {
 	brief = strings.TrimSpace(brief)
 	return
 }
-
-// 获取图片id,图片
-/*i, err := getPicID(key)
-fmt.Println(key, i)
-if err != nil {
-	ctx.SendChain(message.Text("ERROR: ", err))
-	return
-}
-path, err := getPic(i[0])
-if err != nil {
-	ctx.SendChain(message.Text("ERROR: ", err))
-	return
-}*/

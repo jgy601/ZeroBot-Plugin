@@ -123,7 +123,7 @@ func init() {
 			}
 			ctx.SendChain(message.Text("保存apikey成功"))
 		})
-	engine.OnRegex(`^添加预设\s*(\S+)\s+(.*)$`, zero.SuperUserPermission, getdb).SetBlock(true).
+	engine.OnRegex(`^添加预设\s*(\S+)\s+(.*)$`, zero.UserOrGrpAdmin, getdb).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			modename := ctx.State["regex_matched"].([]string)[1]
 			content := ctx.State["regex_matched"].([]string)[2]
