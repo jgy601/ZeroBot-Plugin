@@ -30,9 +30,9 @@ func init() { // 插件主体
 			time.Sleep(time.Second * 1)
 			ctx.SendChain(message.Text(
 				[]string{
-					nickname + "在此，有何贵干~",
-					"(っ●ω●)っ在~",
-					"这里是" + nickname + "(っ●ω●)っ",
+					nickname + "在哦~",
+					"在~",
+					"这里是" + nickname + "~",
 					nickname + "不在呢~",
 				}[rand.Intn(4)],
 			))
