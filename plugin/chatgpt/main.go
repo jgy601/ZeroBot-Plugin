@@ -25,9 +25,11 @@ var (
 	wfkey  string
 	cache  = ttl.NewCache[sessionKey, []chatMessage](time.Minute * 15)
 	engine = control.Register("chatgpt", &ctrl.Options[*zero.Ctx]{
-		DisableOnDefault: false,
+		DisableOnDefault: true,
 		Brief:            "chatgpt",
-		Help: "-@bot [对话内容]\n" +
+		Help: "由于免费api限制为每分钟3次，默认已禁用\n" +
+			"如需启用请设置apikey后授权本群使用(参考下方)\n" +
+			"-@bot [对话内容]\n" +
 			"添加预设xxx xxx\n" +
 			"设置(默认)预设xxx\n" +
 			"删除本群预设\n" +

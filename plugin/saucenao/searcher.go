@@ -32,8 +32,8 @@ func init() { // 插件主体
 	engine := control.Register("saucenao", &ctrl.Options[*zero.Ctx]{
 		DisableOnDefault: false,
 		Brief:            "以图搜图",
-		Help: "- 以图搜图 | 搜索图片 | 以图识图[图片]\n" +
-			"- 搜图[P站图片ID]",
+		Help: "- 搜图 | 以图搜图 | 搜索图片 | 以图识图[图片]\n" +
+			"- 搜id[P站图片ID]",
 		PrivateDataFolder: "saucenao",
 	})
 	apikeyfile := engine.DataFolder() + "apikey.txt"
@@ -51,7 +51,7 @@ func init() { // 插件主体
 		}
 	}
 	// 根据 PID 搜图
-	engine.OnRegex(`^搜图(\d+)$`).SetBlock(true).
+	engine.OnRegex(`^搜[iI][dD](\d+)$`).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			id, _ := strconv.ParseInt(ctx.State["regex_matched"].([]string)[1], 10, 64)
 			ctx.SendChain(message.Text("少女祈祷中......"))
@@ -106,7 +106,7 @@ func init() { // 插件主体
 			}
 		})
 	// 以图搜图
-	engine.OnKeywordGroup([]string{"以图搜图", "搜索图片", "以图识图"}, zero.MustProvidePicture).SetBlock(true).
+	engine.OnKeywordGroup([]string{"搜图", "以图搜图", "搜索图片", "以图识图"}, zero.MustProvidePicture).SetBlock(true).
 		Handle(func(ctx *zero.Ctx) {
 			// 开始搜索图片
 			pics, ok := ctx.State["image_url"].([]string)
