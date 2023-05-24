@@ -175,6 +175,7 @@ import (
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/draw"           // 服务详情
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/games" // 游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/klala" // 星穹铁道
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/moehu" // 图库
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
