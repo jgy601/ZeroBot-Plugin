@@ -5,11 +5,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"os"
 	"strings"
 
 	fcext "github.com/FloatTech/floatbox/ctxext"
-	"github.com/FloatTech/floatbox/web"
 	ctrl "github.com/FloatTech/zbpctrl"
 	"github.com/FloatTech/zbputils/control"
 	"github.com/PuerkitoBio/goquery"
@@ -19,47 +17,33 @@ import (
 
 func init() { // 插件主体
 	engine := control.Register("vtbwife", &ctrl.Options[*zero.Ctx]{
-		DisableOnDefault:  false,
-		Brief:             "抽vtb老婆",
-		Help:              "- 抽vtb",
-		PrivateDataFolder: "vtb_wife",
+		DisableOnDefault: false,
+		Brief:            "抽vtb老婆",
+		Help:             "- 抽vtb(老婆)",
+		PublicDataFolder: "VtbWife",
 	})
 	var keys []string
-	engine.OnRegex(`^抽vtb$`, fcext.DoOnceOnSuccess(
+	engine.OnRegex(`^抽(vtb|VTB)(老婆)?$`, fcext.DoOnceOnSuccess(
 		func(ctx *zero.Ctx) bool {
-			content, err := os.ReadFile(engine.DataFolder() + "wife_list.txt") // 779分界
+			content, err := engine.GetLazyData("wife_list.txt", false)
 			if err != nil {
-				log.Println("[vtbwife]读取vtbwife数据文件失败: ", err)
-				return false
+				panic(err)
 			}
 			// 将文件内容转换为单词
 			keys = strings.Split(string(content), "\n")
-			log.Println("[vtbwife]加载", len(keys), "位wife数据...")
+			log.Println("[vtbwife]加载", len(keys), "位wtb...")
 			return true
 		})).SetBlock(true).Handle(func(ctx *zero.Ctx) {
 		var key, u, b string
 		var ok bool
-		for i := 0; i < 3; i++ {
+		for i := 0; i < 10 && !ok; i++ {
 			key = keys[fcext.RandSenderPerDayN(ctx.Event.UserID, len(keys))+i]
 			u, b, ok = geturl(key)
-			if !ok {
-				continue
-			}
-			break
-		}
-		if !ok {
-			ctx.SendChain(message.Text("-获取图片链接失败"))
-			return
-		}
-		img, err := web.GetData(u)
-		if err != nil {
-			ctx.SendChain(message.Text("-获取图片失败惹", err))
-			return
 		}
 		txt := message.Text(
 			"\n今天你的VTB老婆是: ", key,
 		)
-		if id := ctx.SendChain(message.At(ctx.Event.UserID), txt, message.ImageBytes(img), message.Text(b)); id.ID() == 0 {
+		if id := ctx.SendChain(message.At(ctx.Event.UserID), txt, message.Image(u), message.Text(b)); id.ID() == 0 {
 			ctx.SendChain(message.At(ctx.Event.UserID), txt, message.Text("图片发送失败...\n"), message.Text(b))
 		}
 	})
@@ -77,44 +61,38 @@ func geturl(kword string) (u, brief string, ok bool) {
 		return "", "", false
 	}
 	u, ok = doc.Find(".infobox-image").Attr("src") // class加.
+	if !ok {
+		return "", "", ok
+	}
 	doc.Find("style").Remove()
 	doc.Find("script").Remove()
-	doc.Find("big").Remove()
-	b := doc.Find(".moe-infobox").Find("tr").Text() // class加.
-	bs := strings.Split(b, "\n")
-	// 寻找"基本资料"
+	doc.Find(".fans-medal-level").Remove()
 	var (
-		k int
-		f bool // 判断换行
+		b   []string
+		k   int
+		buf strings.Builder
 	)
-	for kk, vv := range bs {
-		if vv == "基本资料" {
-			brief = vv + "\n"
+	doc.Find(".moe-infobox").Find("tr").Each(func(i int, s *goquery.Selection) {
+		b = append(b, strings.TrimSpace(s.Text()))
+	})
+	for kk, v := range b {
+		if v == "基本资料" || v == "基本信息" || v == "名字" || v == "名称" {
 			k = kk + 1
+			break
 		}
 	}
-	for ; k < len(bs); k++ {
-		switch bs[k] {
-		case "直播关联", "制作所属", "个人数据", "名字":
-			continue
-		case "活动范围":
-			k += 2
-			continue
-		case "进入直播间":
-			bs[k] = ""
-		}
-		if t := strings.TrimSpace(bs[k]); t == "" {
-			continue
-		} else {
-			f = !f
-			brief += t
-		}
-		if f {
-			brief += ": "
-		} else {
-			brief += "\n"
-		}
+	if k != 0 {
+		buf.WriteString(b[k-1])
+		buf.WriteString("\n")
 	}
-	brief = strings.TrimSpace(brief)
-	return
+	for ; k < len(b); k++ {
+		buf.WriteString(strings.Replace(strings.Replace(b[k], "\n", ": ", 1), "\n", "", 1))
+		buf.WriteString("\n")
+	}
+
+	brief = strings.TrimSpace(buf.String())
+	if brief == "" {
+		return "", "", false
+	}
+	return u, brief, true
 }

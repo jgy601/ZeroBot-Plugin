@@ -179,6 +179,7 @@ import (
 
 	// _ "github.com/FloatTech/ZeroBot-Plugin/plugin/phigros"        // phigros b19
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/partygame"  // 派对游戏
+	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/ping"       // ping
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/playwright" // 网页截图
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/tupian"     // 图片
 	_ "github.com/FloatTech/ZeroBot-Plugin/plugin/vtb_wife"   // 抽vtb老婆
@@ -286,6 +287,7 @@ func init() {
 	sus = append(sus, 2232022413)
 	sus = append(sus, 2625439573)
 	sus = append(sus, 1975265341)
+	sus = append(sus, 1358688418)
 
 	if *runcfg != "" {
 		f, err := os.Open(*runcfg)
