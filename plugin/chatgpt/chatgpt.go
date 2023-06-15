@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -13,21 +12,22 @@ import (
 
 const (
 	// baseURL  = "https://api.openai.com/v1/"
-	proxyURL           = "https://api.openai.com/v1/"
+	proxyURL           = "https://open.aiproxy.xyz/v1/"
 	modelGPT3Dot5Turbo = "gpt-3.5-turbo"
-	wfurl              = "https://api.gpt.wf/v3/completions"
+	yunKey             = "7d06a110e9e20a684e02934549db1d3d"
+	yunURL             = "https://api.a20safe.com/api.php?api=35&key=%s&apikey=%s"
 )
 
-/*
-type chatkeymessage struct {
-	Code           int     `json:"code"`
-	Msg            string  `json:"msg"`
-	TotalGranted   float64 `json:"total_granted"`
-	TotalUsed      float64 `json:"total_used"`
-	TotalAvailable float64 `json:"total_available"`
-	EffectiveAt    int64   `json:"effective_at"`
-	ExpiresAt      int64   `json:"expires_at"`
-}*/
+type yun struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data []struct {
+		Return    string `json:"return"`
+		Total     string `json:"total"`
+		Available string `json:"available"`
+		Used      string `json:"used"`
+	} `json:"data"`
+}
 
 // chatGPTResponseBody 响应体
 type chatGPTResponseBody struct {
@@ -64,11 +64,6 @@ type chatUsage struct {
 	PromptTokens     int `json:"prompt_tokens"`
 	CompletionTokens int `json:"completion_tokens"`
 	TotalTokens      int `json:"total_tokens"`
-}
-
-type wfmess struct {
-	Keys   string `json:"keys"`
-	Prompt string `json:"prompt"`
 }
 
 var client = &http.Client{
@@ -121,38 +116,4 @@ func completions(messages []chatMessage, apiKey string) (*chatGPTResponseBody, e
 		return nil, err
 	}
 	return v, nil
-}
-
-func completionsWF(message, key string) (string, error) {
-	body, err := json.Marshal(wfmess{
-		Prompt: message,
-		Keys:   key,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	payload := bytes.NewReader(body)
-	client := &http.Client{
-		Timeout: time.Minute * 5,
-	}
-	req, err := http.NewRequest(http.MethodPost, wfurl, payload)
-
-	if err != nil {
-		return "", err
-	}
-	req.Header.Add("User-Agent", "Apifox/1.0.0 (https://www.apifox.cn)")
-	req.Header.Add("Content-Type", "application/json")
-
-	res, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer res.Body.Close()
-
-	body, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(body), nil
 }

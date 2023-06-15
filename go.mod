@@ -31,6 +31,7 @@ require (
 	github.com/jozsefsallai/gophersauce v1.0.1
 	github.com/lithammer/fuzzysearch v1.1.5
 	github.com/mroth/weightedrand v1.0.0
+	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/pkg/errors v0.9.1
 	github.com/playwright-community/playwright-go v0.2000.1
 	github.com/quic-go/quic-go v0.32.0
@@ -46,10 +47,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
-require (
-	github.com/andybalholm/cascadia v1.3.1 // indirect
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 // indirect
-)
+require github.com/andybalholm/cascadia v1.3.1 // indirect
 
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
